@@ -38,7 +38,6 @@ int len = 30;
 byte dirP;
 byte dirT;
 
-
 void setup() {
   video = new Capture(this, 640, 480);
   video.start();
