@@ -10,14 +10,14 @@ PImage src, colorFilteredImage;
 ArrayList<Contour> contours;
 
 int gap = 10;
-int strip = 25;
-int stick = 126;
-int button = 57;
+int strip = 20;
+int stick = 106;
+int button = 48;
 int edge = 10;
 
-int x = 640 + 2 * gap + stick + button / 2;
-int pY = 160 + 2 * gap + strip + button / 2;
-int cY = 160 + 3 * gap + strip + 3 * button / 2;
+int x = 640 + 2 * gap + strip + button / 2;
+int pY = 160 + gap + button / 2;
+int cY = 160 + 2 * gap + 3 * button / 2;
 
 color b0 = color(100);
 color bB0 = color(80);
@@ -38,6 +38,7 @@ int len = 30;
 byte dirP;
 byte dirT;
 
+
 void setup() {
   video = new Capture(this, 640, 480);
   video.start();
@@ -51,16 +52,16 @@ void setup() {
   
   noStroke();
   fill(255);
-  rect(640, 160, 213, 3 * gap + strip + stick);
+  rect(640, 160, 213, 2 * gap + stick);
   
   strokeWeight(2);
   stroke(240);
   fill(255);
-  rect(640 + gap, 160 + gap, 213 - 2 * gap, strip, edge);
+  rect(640 + gap, 160 + gap, strip, stick, edge);
   
   noStroke();
   fill(240);
-  rect(640 + gap, 160 + 2 * gap + strip, stick, stick, edge);
+  rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
   
   pauseI(b0, bB0);
   captureI(b0, bB0);
@@ -169,7 +170,7 @@ void mousePressed() {
     strokeWeight(2);
     stroke(240);
     fill(c);
-    rect(640 + gap, 160 + gap, 213 - 2 * gap, strip, edge);
+    rect(640 + gap, 160 + gap, strip, stick, edge);
   
     int hue = int(map(hue(c), 0, 255, 0, 180));
   
@@ -233,10 +234,11 @@ void pauseI(color f, color b) {
   
   fill(f);
   noStroke();
-  rect(x - 11, pY - 13, 7, 26);
+  rect(x - 8, pY - 9, 5, 18);
+  
   fill(f);
   noStroke();
-  rect(x + 4, pY - 13, 7, 26);
+  rect(x + 3, pY - 9, 5, 18);
 }
 
 void continueI(color f, color b) {
@@ -246,7 +248,7 @@ void continueI(color f, color b) {
   
   fill(f);
   noStroke();
-  triangle(x - 8, pY - 14, x - 8, pY + 14, x + 16, pY);
+  triangle(x - 6, pY - 10, x - 6, pY + 10, x + 11, pY);
 }
 
 void captureI(color f, color b) {
@@ -256,5 +258,5 @@ void captureI(color f, color b) {
   
   fill(f);
   noStroke();
-  ellipse(x, cY, 25, 25);
+  ellipse(x, cY, 18, 18);
 }
