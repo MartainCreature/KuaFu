@@ -13,11 +13,14 @@ int gap = 10;
 int strip = 20;
 int stick = 106;
 int button = 48;
+int handle = 30;
 int edge = 10;
 
 int x = 640 + 2 * gap + strip + button / 2;
 int pY = 160 + gap + button / 2;
 int cY = 160 + 2 * gap + 3 * button / 2;
+int sX = 640 + 3 * gap + strip + button + stick / 2;
+int sY = 160 + gap + stick / 2;
 
 color b0 = color(100);
 color bB0 = color(80);
@@ -27,6 +30,7 @@ color bB1 = color(20);
 boolean move = true;
 
 boolean mp = false;
+boolean mP = false;
 
 int fileNum = 1;
 
@@ -61,6 +65,9 @@ void setup() {
   noStroke();
   fill(240);
   rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
+  noStroke();
+  fill(150);
+  ellipse(640 + 3 * gap + strip + button + stick / 2, 160 + gap + stick / 2, handle, handle);
   
   pauseI(b0, bB0);
   captureI(b0, bB0);
@@ -189,6 +196,35 @@ void mousePressed() {
   if (Over() == 'c') {
     captureI(b1, bB1);
   }
+  
+  if (Over() == 's') {
+    mP = true;  
+  }
+  
+  if (move == false) {
+    int a1 = 28;
+    int a0 = 3;
+    if (mX - sX < -a1) {
+      port.write(byte('L'));  
+    } else if (mX - sX < -a0) {
+      port.write(byte('l'));
+    }     
+    else if (mX - sX > a1) {
+      port.write(byte('R'));
+    } else if (mX - sX > a0) {
+      port.write(byte('r'));
+    }
+    if (mY - sY < -a1) {
+      port.write(byte('U'));
+    } else if (mY - sY < -a0) {
+      port.write(byte('u'));
+    }
+    else if (mY - sY > a1) {
+      port.write(byte('D'));
+    } else if (mY - sY > a0) {
+      port.write(byte('d'));
+    }
+  }
 }
 
 void mouseReleased() {    
@@ -212,6 +248,40 @@ void mouseReleased() {
     
     captureI(b0, bB0);
   }
+  
+  mP = false;
+  noStroke();
+  fill(240);
+  rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
+  noStroke();
+  fill(150);
+  ellipse(640 + 3 * gap + strip + button + stick / 2, 160 + gap + stick / 2, handle, handle);
+}
+
+void mouseDragged() {
+  if (mP == true) {
+    int mX = mouseX;
+    int mY = mouseY;
+    if (mX - sX < -stick / 2 + (handle + 1) / 2) {
+      mX = sX - stick / 2 + (handle + 1) / 2;
+    }
+    if (mX - sX > stick / 2 - (handle + 1) / 2) {
+      mX = sX + stick / 2 - (handle + 1) / 2;
+    }
+    if (mY - sY < -stick / 2 + (handle + 1) / 2) {
+      mY = sY - stick / 2 + (handle + 1) / 2;
+    }
+    if (mY - sY > stick / 2 - (handle + 1) / 2) {
+      mY = sY + stick / 2 - (handle + 1) / 2;
+    }
+    
+    noStroke();
+    fill(240);
+    rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
+    noStroke();
+    fill(150);
+    ellipse(mX, mY, handle, handle);
+  }
 }
 
 char Over() {
@@ -220,6 +290,9 @@ char Over() {
   }
   else if (abs(mouseX - x) <= button / 2 && abs(mouseY - cY) <= button / 2) {
     return 'c';
+  }
+  else if (abs(mouseX - sX) <= stick / 2 && abs(mouseY - sY) <= stick / 2) {
+    return 's';
   }
   else {
     return 'n';
