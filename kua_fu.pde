@@ -259,7 +259,6 @@ void mousePressed() {
       mY = sY + stick / 2 - (handle + 1) / 2;
     }
     
-    
     noStroke();
     fill(240);
     rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
