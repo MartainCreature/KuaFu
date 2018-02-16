@@ -97,7 +97,7 @@ void draw() {
   
   image(src, 0, 0);
   
-  if (contours.size() > 0 && mp == true) {
+  if (contours.size() > 0 && mp) {
     Contour biggestContour = contours.get(0);
     
     Rectangle r = biggestContour.getBoundingBox();
@@ -136,7 +136,7 @@ void draw() {
         port.write(byte('0'));
       }
     
-      if (move == true) {
+      if (move && !mP) {
         port.write(dirP);
         port.write(dirT);
     
@@ -166,7 +166,7 @@ void draw() {
   dirP = 0;
   dirT = 0;
   
-  if (move == false && mousePressed) {
+  if (!move && mousePressed) {
     int a1 = 28;
     int a0 = 3;
     if (mX - sX < -a1) {
@@ -210,7 +210,7 @@ void mousePressed() {
   }
   
   if (Over() == 'p') {
-    if (move == true) {
+    if (move) {
       pauseI(b1, bB1);
     }
     else {
@@ -252,7 +252,7 @@ void mousePressed() {
 void mouseReleased() {    
   if (Over() == 'p') {
     move = !move;
-    if (move == true) {
+    if (move) {
       pauseI(b0, bB0);
     }
     else {
@@ -261,7 +261,7 @@ void mouseReleased() {
   }
   
   if (Over() == 'c') {
-    if (video.available() == true) {
+    if (video.available()) {
       video.read();
     }
     video.save("Saved/" + fileNum + ".tif");
@@ -281,7 +281,7 @@ void mouseReleased() {
 }
 
 void mouseDragged() {
-  if (mP == true) {
+  if (mP) {
     mX = mouseX;
     mY = mouseY;
     if (mX - sX < -stick / 2 + (handle + 1) / 2) {
