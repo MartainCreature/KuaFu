@@ -15,12 +15,15 @@ int stick = 106;
 int button = 48;
 int handle = 30;
 int edge = 10;
+int lH = 30;
+int l0 = 10;
 
 int x = 640 + 2 * gap + strip + button / 2;
 int pY = 160 + gap + button / 2;
 int cY = 160 + 2 * gap + 3 * button / 2;
 int sX = 640 + 3 * gap + strip + button + stick / 2;
 int sY = 160 + gap + stick / 2;
+int tY = 160 + 2 * gap + stick;
 
 int mX, mY;
 
@@ -41,12 +44,14 @@ int rangeHigh = 10;
 int midx = 320;
 int midy = 240;
 int len = 30;
-byte dirP;
-byte dirT;
+
+byte dirP, dirT;
+
+PFont font;
 
 void setup() {
   video = new Capture(this, 640, 480);
-  video.start();
+  video.start(); 
   
   opencv = new OpenCV(this, video.width, video.height);
   contours = new ArrayList<Contour>();
@@ -73,9 +78,23 @@ void setup() {
   
   pauseI(b0, bB0);
   captureI(b0, bB0);
+  
+  font = createFont("font", 16);
 }
 
 void draw() {
+  String[] ser = Serial.list();
+  if (ser.length < 5) {
+    textFont(font, 16);
+    fill(255);
+    text("请检查云台连接", 640 + l0, tY + l0, 213 - l0, 320 - 2 * gap - stick - l0);
+  }
+  else {
+    noStroke();
+    fill(0);
+    rect(640, tY, 213, 320);
+  }
+  
   if (video.available()) {
     video.read();
   }
@@ -239,6 +258,7 @@ void mousePressed() {
     if (mY - sY > stick / 2 - (handle + 1) / 2) {
       mY = sY + stick / 2 - (handle + 1) / 2;
     }
+    
     
     noStroke();
     fill(240);
