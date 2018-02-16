@@ -22,6 +22,8 @@ int cY = 160 + 2 * gap + 3 * button / 2;
 int sX = 640 + 3 * gap + strip + button + stick / 2;
 int sY = 160 + gap + stick / 2;
 
+int mX, mY;
+
 color b0 = color(100);
 color bB0 = color(80);
 color b1 = color(220);
@@ -164,7 +166,30 @@ void draw() {
   dirP = 0;
   dirT = 0;
   
-  delay(100);
+  if (move == false && mousePressed) {
+    int a1 = 28;
+    int a0 = 3;
+    if (mX - sX < -a1) {
+      port.write(byte('L'));  
+    } else if (mX - sX < -a0) {
+      port.write(byte('l'));
+    }     
+    else if (mX - sX > a1) {
+      port.write(byte('R'));
+    } else if (mX - sX > a0) {
+      port.write(byte('r'));
+    }
+    if (mY - sY < -a1) {
+      port.write(byte('U'));
+    } else if (mY - sY < -a0) {
+      port.write(byte('u'));
+    }
+    else if (mY - sY > a1) {
+      port.write(byte('D'));
+    } else if (mY - sY > a0) {
+      port.write(byte('d'));
+    }
+  }
 }
 
 void mousePressed() {
@@ -199,31 +224,28 @@ void mousePressed() {
   
   if (Over() == 's') {
     mP = true;  
-  }
-  
-  if (move == false) {
-    int a1 = 28;
-    int a0 = 3;
-    if (mX - sX < -a1) {
-      port.write(byte('L'));  
-    } else if (mX - sX < -a0) {
-      port.write(byte('l'));
-    }     
-    else if (mX - sX > a1) {
-      port.write(byte('R'));
-    } else if (mX - sX > a0) {
-      port.write(byte('r'));
+    
+    mX = mouseX;
+    mY = mouseY;
+    if (mX - sX < -stick / 2 + (handle + 1) / 2) {
+      mX = sX - stick / 2 + (handle + 1) / 2;
     }
-    if (mY - sY < -a1) {
-      port.write(byte('U'));
-    } else if (mY - sY < -a0) {
-      port.write(byte('u'));
+    if (mX - sX > stick / 2 - (handle + 1) / 2) {
+      mX = sX + stick / 2 - (handle + 1) / 2;
     }
-    else if (mY - sY > a1) {
-      port.write(byte('D'));
-    } else if (mY - sY > a0) {
-      port.write(byte('d'));
+    if (mY - sY < -stick / 2 + (handle + 1) / 2) {
+      mY = sY - stick / 2 + (handle + 1) / 2;
     }
+    if (mY - sY > stick / 2 - (handle + 1) / 2) {
+      mY = sY + stick / 2 - (handle + 1) / 2;
+    }
+    
+    noStroke();
+    fill(240);
+    rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
+    noStroke();
+    fill(150);
+    ellipse(mX, mY, handle, handle);
   }
 }
 
@@ -260,8 +282,8 @@ void mouseReleased() {
 
 void mouseDragged() {
   if (mP == true) {
-    int mX = mouseX;
-    int mY = mouseY;
+    mX = mouseX;
+    mY = mouseY;
     if (mX - sX < -stick / 2 + (handle + 1) / 2) {
       mX = sX - stick / 2 + (handle + 1) / 2;
     }
