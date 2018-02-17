@@ -13,7 +13,7 @@ int gap = 10;
 int strip = 20;
 int stick = 106;
 int button = 48;
-int handle = 30;
+int handle = 26;
 int edge = 10;
 int lH = 30;
 int l0 = 10;
@@ -27,10 +27,10 @@ int tY = 160 + 2 * gap + stick;
 
 int mX, mY;
 
-color b0 = color(100);
-color bB0 = color(80);
-color b1 = color(220);
-color bB1 = color(20);
+color b0 = color(35);
+color bB0 = color(255);
+color b1 = color(35);
+color bB1 = color(200);
 
 boolean move = true;
 
@@ -61,20 +61,20 @@ void setup() {
   background(0);
   
   noStroke();
-  fill(255);
+  fill(236);
   rect(640, 160, 213, 2 * gap + stick);
   
   strokeWeight(2);
-  stroke(240);
+  stroke(250);
   fill(255);
   rect(640 + gap, 160 + gap, strip, stick, edge);
   
   noStroke();
-  fill(240);
+  fill(250);
   rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
   noStroke();
-  fill(150);
-  ellipse(640 + 3 * gap + strip + button + stick / 2, 160 + gap + stick / 2, handle, handle);
+  fill(35);
+  rect(640 + 3 * gap + strip + button + stick / 2 - handle / 2, 160 + gap + stick / 2 - handle / 2, handle, handle, edge);
   
   pauseI(b0, bB0);
   captureI(b0, bB0);
@@ -180,7 +180,9 @@ void draw() {
     }
   }
   
-  image(colorFilteredImage, src.width, 0, src.width/3, src.height/3);
+  if (mp) {
+    image(colorFilteredImage, src.width, 0, src.width/3, src.height/3);
+  }
 
   dirP = 0;
   dirT = 0;
@@ -218,7 +220,7 @@ void mousePressed() {
     color c = get(mouseX, mouseY);
   
     strokeWeight(2);
-    stroke(240);
+    stroke(250);
     fill(c);
     rect(640 + gap, 160 + gap, strip, stick, edge);
   
@@ -260,11 +262,11 @@ void mousePressed() {
     }
     
     noStroke();
-    fill(240);
+    fill(250);
     rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
     noStroke();
-    fill(150);
-    ellipse(mX, mY, handle, handle);
+    fill(35);
+    rect(mX - handle / 2, mY - handle / 2, handle, handle, edge);
   }
 }
 
@@ -292,11 +294,11 @@ void mouseReleased() {
   
   mP = false;
   noStroke();
-  fill(240);
+  fill(250);
   rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
   noStroke();
-  fill(150);
-  ellipse(640 + 3 * gap + strip + button + stick / 2, 160 + gap + stick / 2, handle, handle);
+  fill(35);
+  rect(640 + 3 * gap + strip + button + stick / 2 - handle / 2, 160 + gap + stick / 2 - handle / 2, handle, handle, edge);
 }
 
 void mouseDragged() {
@@ -317,11 +319,11 @@ void mouseDragged() {
     }
     
     noStroke();
-    fill(240);
+    fill(250);
     rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
     noStroke();
-    fill(150);
-    ellipse(mX, mY, handle, handle);
+    fill(35);
+    rect(mX - handle / 2, mY - handle / 2, handle, handle, edge);
   }
 }
 
