@@ -15,7 +15,7 @@ int stick = 106;
 int button = 48;
 int handle = 26;
 int edge = 10;
-int lH = 30;
+int lH = 25;
 int l0 = 10;
 
 int x = 640 + 2 * gap + strip + button / 2;
@@ -33,9 +33,9 @@ color b1 = color(35);
 color bB1 = color(200);
 
 boolean move = true;
-
 boolean mp = false;
 boolean mP = false;
+boolean bs;
 
 int fileNum = 1;
 
@@ -47,7 +47,13 @@ int len = 30;
 
 byte dirP, dirT;
 
+int[] ntf = new int[3];
+String s1 = "请检查云台连接";
+String s2 = "请单击图像以选择颜色";
+
 PFont font;
+
+int i, j;
 
 void setup() {
   video = new Capture(this, 640, 480);
@@ -85,14 +91,50 @@ void setup() {
 void draw() {
   String[] ser = Serial.list();
   if (ser.length < 5) {
-    textFont(font, 16);
-    fill(255);
-    text("请检查云台连接", 640 + l0, tY + l0, 213 - l0, 320 - 2 * gap - stick - l0);
+    bs = false;
+    for (i = 0; i < 3; i++) {
+      if (ntf[i] == 1) {
+        bs = true;
+        break;
+      }
+    }
+    if (!bs) {
+      ntf[2] = 1;
+    }
+    
+    update();
   }
   else {
-    noStroke();
-    fill(0);
-    rect(640, tY, 213, 320);
+    for (i = 0; i < 3; i++) {
+      if (ntf[i] == 1) {
+        ntf[i] = 0;
+        break;
+      }
+    }
+    update();
+  }
+  
+  if (!mp) {
+    bs = false;
+    for (i = 0; i < 3; i++) {
+      if (ntf[i] == 2) {
+        bs = true;
+        break;
+      }
+    }
+    if (!bs) {
+      ntf[2] = 2;
+    }
+    update();
+  }
+  else {
+    for (i = 0; i < 3; i++) {
+      if (ntf[i] == 2) {
+        ntf[i] = 0;
+        break;
+      }
+    }
+    update();
   }
   
   if (video.available()) {
@@ -374,4 +416,37 @@ void captureI(color f, color b) {
   fill(f);
   noStroke();
   ellipse(x, cY, 18, 18);
+}
+
+void update() {
+  for (i = 0; i < 3; i++) {
+    for (j = 0; j < 2; j++) {
+      if (ntf[j] == 0) {
+        ntf[j] = ntf[j + 1];
+        ntf[j + 1] = 0;
+      }
+    }
+  }
+  
+  noStroke();
+  fill(0);
+  rect(640, tY, 213, 320);
+  
+  for (i = 0; i < 3; i++) {
+    if (ntf[i] == 0) {
+      break;
+    }
+    
+    String sn = "";
+    if (ntf[i] == 1) {
+      sn = s1;
+    }
+    if (ntf[i] == 2) {
+      sn = s2;
+    }
+    
+    textFont(font, 16);
+    fill(255);
+    text(sn, 640 + l0, tY + l0 + i * lH, 213 - l0, 320 - 2 * gap - stick - l0 - i * lH);
+  }
 }
