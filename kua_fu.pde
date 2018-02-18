@@ -288,20 +288,8 @@ void mousePressed() {
   if (Over() == 's') {
     mP = true;  
     
-    mX = mouseX;
-    mY = mouseY;
-    if (mX - sX < -stick / 2 + (handle + 1) / 2) {
-      mX = sX - stick / 2 + (handle + 1) / 2;
-    }
-    if (mX - sX > stick / 2 - (handle + 1) / 2) {
-      mX = sX + stick / 2 - (handle + 1) / 2;
-    }
-    if (mY - sY < -stick / 2 + (handle + 1) / 2) {
-      mY = sY - stick / 2 + (handle + 1) / 2;
-    }
-    if (mY - sY > stick / 2 - (handle + 1) / 2) {
-      mY = sY + stick / 2 - (handle + 1) / 2;
-    }
+    mX = constrain(mouseX, sX - stick / 2 + (handle + 1) / 2, sX + stick / 2 - (handle + 1) / 2);
+    mY = constrain(mouseY, sY - stick / 2 + (handle + 1) / 2, sY + stick / 2 - (handle + 1) / 2);
     
     noStroke();
     fill(60);
@@ -345,20 +333,8 @@ void mouseReleased() {
 
 void mouseDragged() {
   if (mP) {
-    mX = mouseX;
-    mY = mouseY;
-    if (mX - sX < -stick / 2 + (handle + 1) / 2) {
-      mX = sX - stick / 2 + (handle + 1) / 2;
-    }
-    if (mX - sX > stick / 2 - (handle + 1) / 2) {
-      mX = sX + stick / 2 - (handle + 1) / 2;
-    }
-    if (mY - sY < -stick / 2 + (handle + 1) / 2) {
-      mY = sY - stick / 2 + (handle + 1) / 2;
-    }
-    if (mY - sY > stick / 2 - (handle + 1) / 2) {
-      mY = sY + stick / 2 - (handle + 1) / 2;
-    }
+    mX = constrain(mouseX, sX - stick / 2 + (handle + 1) / 2, sX + stick / 2 - (handle + 1) / 2);
+    mY = constrain(mouseY, sY - stick / 2 + (handle + 1) / 2, sY + stick / 2 - (handle + 1) / 2);
     
     noStroke();
     fill(60);
