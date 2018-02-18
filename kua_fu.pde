@@ -89,8 +89,7 @@ void setup() {
 }
 
 void draw() {
-  String[] ser = Serial.list();
-  if (ser.length < 5) {
+  if (Serial.list().length < 5) {
     bs = false;
     for (i = 0; i < 3; i++) {
       if (ntf[i] == 1) {
