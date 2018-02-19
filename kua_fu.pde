@@ -110,6 +110,7 @@ void draw() {
         break;
       }
     }
+    
     update();
   }
   
@@ -124,7 +125,10 @@ void draw() {
     if (!bs) {
       ntf[2] = 2;
     }
+    
     update();
+    
+    port.write(byte('!'));
   }
   else {
     for (i = 0; i < 3; i++) {
@@ -133,6 +137,7 @@ void draw() {
         break;
       }
     }
+    
     update();
   }
   
