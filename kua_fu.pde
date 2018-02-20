@@ -412,6 +412,10 @@ void update() {
   fill(0);
   rect(640, tY, 213, 320);
   
+  noStroke();
+  fill(36);
+  rect(640, 160, 2, tY - 160);
+  
   for (i = 0; i < 3; i++) {
     if (ntf[i] == 0) {
       break;
