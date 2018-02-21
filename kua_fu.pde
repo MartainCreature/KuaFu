@@ -177,31 +177,35 @@ void draw() {
       fill(240);
       ellipse(r.x + r.width/2, r.y + r.height/2, 25, 25);
     
-      if (r.x + r.width/2 < midx - 50) {
-        dirP = byte('L');  
-      } else if (r.x + r.width/2 < midx - 20) {
-        dirP = byte('l');
-      }      
-      else if (r.x + r.width/2 > midx + 50) {
-        dirP = byte('R');
-      } else if (r.x + r.width/2 > midx + 20) {
-        dirP = byte('r');
-      }
-      if (r.y + r.height/2 < midy - 50) {
-        dirT = byte('U');
-      } else if (r.y + r.height/2 < midy - 20) {
-        dirT = byte('u');
-      }
-      else if (r.y + r.height/2 > midy + 50) {
-        dirT = byte('D');
-      } else if (r.y + r.height/2 > midy + 20) {
-        dirT = byte('d');
-      }
-      else {
-        port.write(byte('0'));
-      }
-    
       if (move && !mP) {
+        if (r.x + r.width/2 < midx - 50) {
+          dirP = byte('L');  
+        } else if (r.x + r.width/2 < midx - 20) {
+          dirP = byte('l');
+        }      
+        else if (r.x + r.width/2 > midx + 50) {
+          dirP = byte('R');
+        } else if (r.x + r.width/2 > midx + 20) {
+          dirP = byte('r');
+        }
+        else {
+          dirP = byte('p');
+        }
+        
+        if (r.y + r.height/2 < midy - 50) {
+          dirT = byte('U');
+        } else if (r.y + r.height/2 < midy - 20) {
+          dirT = byte('u');
+        }
+        else if (r.y + r.height/2 > midy + 50) {
+          dirT = byte('D');
+        } else if (r.y + r.height/2 > midy + 20) {
+          dirT = byte('d');
+        }
+        else {
+          dirT = byte('t');
+        }
+    
         port.write(dirP);
         port.write(dirT);
     
