@@ -319,7 +319,7 @@ void mouseReleased() {
     if (video.available()) {
       video.read();
     }
-    video.save("Saved/" + fileNum + ".tif");
+    video.save("照片/" + fileNum + ".tif");
     
     fileNum++;
     
