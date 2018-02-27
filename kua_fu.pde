@@ -237,7 +237,7 @@ void draw() {
   dirP = 0;
   dirT = 0;
   
-  if (!move && mousePressed) {
+  if (mP) {
     int a1 = 28;
     int a0 = 3;
     if (mX - sX < -a1) {
@@ -351,6 +351,25 @@ void mouseDragged() {
     fill(240);
     rect(mX - handle / 2, mY - handle / 2, handle, handle, edge);
   }
+}
+
+void keyPressed() {
+  if (keyCode == 37) {
+
+  }
+  if (keyCode == 39) {
+    
+  }
+  if (keyCode == 38) {
+    
+  }
+  if (keyCode == 40) {
+
+  }
+}
+
+void keyReleased() {
+  
 }
 
 char Over() {
