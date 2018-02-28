@@ -26,6 +26,10 @@ int sY = 160 + gap + stick / 2;
 int tY = 160 + 2 * gap + stick;
 
 int mX, mY;
+int kX, kY;
+
+int a1 = 28;
+int a0 = 3;
 
 color b0 = color(35);
 color bB0 = color(240);
@@ -238,8 +242,6 @@ void draw() {
   dirT = 0;
   
   if (mP) {
-    int a1 = 28;
-    int a0 = 3;
     if (mX - sX < -a1) {
       port.write(byte('L'));  
     } else if (mX - sX < -a0) {
@@ -260,6 +262,46 @@ void draw() {
     } else if (mY - sY > a0) {
       port.write(byte('d'));
     }
+  }
+  
+  if (keyPressed) {
+    if (keyCode == 37) {
+      kX = sX - (a0 + a1) / 2;
+      port.write(byte('l'));
+    }
+    else if (keyCode == 39) {
+      kX = sX + (a0 + a1) / 2;
+      port.write(byte('r'));
+    }
+    else {
+      kX = sX;
+    }
+    if (keyCode == 38) {
+      kY = sY - (a0 + a1) / 2;
+      port.write(byte('u'));
+    }
+    else if (keyCode == 40) {
+      kY = sY + (a0 + a1) / 2;
+      port.write(byte('d'));
+    }
+    else {
+      kY = sY;
+    }
+    
+    noStroke();
+    fill(60);
+    rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
+    noStroke();
+    fill(240);
+    rect(kX - handle / 2, kY - handle / 2, handle, handle, edge);
+  }
+  else {
+    noStroke();
+    fill(60);
+    rect(640 + 3 * gap + strip + button, 160 + gap, stick, stick, edge);
+    noStroke();
+    fill(240);
+    rect(640 + 3 * gap + strip + button + stick / 2 - handle / 2, 160 + gap + stick / 2 - handle / 2, handle, handle, edge);
   }
 }
 
@@ -351,25 +393,6 @@ void mouseDragged() {
     fill(240);
     rect(mX - handle / 2, mY - handle / 2, handle, handle, edge);
   }
-}
-
-void keyPressed() {
-  if (keyCode == 37) {
-
-  }
-  if (keyCode == 39) {
-    
-  }
-  if (keyCode == 38) {
-    
-  }
-  if (keyCode == 40) {
-
-  }
-}
-
-void keyReleased() {
-  
 }
 
 char Over() {
