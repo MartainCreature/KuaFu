@@ -395,6 +395,27 @@ void mouseDragged() {
   }
 }
 
+void keyTyped() {
+  if (key == 'p') {
+    move = !move;
+    if (move) {
+      pauseI(b0, bB0);
+    }
+    else {
+      continueI(b0, bB0);
+    }
+  }
+  
+  if (key == 'c') {
+    if (video.available()) {
+      video.read();
+    }
+    video.save("照片/" + fileNum + ".tif");
+    
+    fileNum++;
+  }
+}
+
 char Over() {
   if (abs(mouseX - x) <= button / 2 && abs(mouseY - pY) <= button / 2) {
     return 'p';
