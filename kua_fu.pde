@@ -293,11 +293,11 @@ void mousePressed() {
 void mouseReleased() {    
   if (Over() == 'p') {
     move = !move;
-    port.write(byte('!'));
     if (move) {
       pauseI(b0, bB0);
     }
     else {
+      port.write(byte('!'));
       continueI(b0, bB0);
     }
   }
