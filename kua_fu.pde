@@ -47,7 +47,11 @@ int len = 30;
 
 byte dirP, dirT;
 
+String version = "版本 2.1.25";
+
 int i, j;
+
+PFont font;
 
 void setup() {
   video = new Capture(this, 640, 480);
@@ -75,6 +79,11 @@ void setup() {
   noStroke();
   fill(240);
   rect(640 + 3 * gap + strip + button + stick / 2 - handle / 2, 160 + gap + stick / 2 - handle / 2, handle, handle, edge);
+  
+  font = createFont("font", 12);
+  textFont(font);
+  fill(255);
+  text(version, 853 - 75, 480 - 9);
   
   pauseI(b0, bB0);
   captureI(b0, bB0);
@@ -176,6 +185,10 @@ void draw() {
   
   if (mp) {
     image(colorFilteredImage, src.width, 0, src.width/3, src.height/3);
+    
+    noStroke();
+    fill(36);
+    rect(640, 160, 2, 320);
   }
 
   dirP = 0;
