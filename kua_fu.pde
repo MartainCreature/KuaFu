@@ -1,3 +1,7 @@
+//夸父
+//
+//版本：2.1.26
+
 import gab.opencv.*;
 import processing.video.*;
 import java.awt.Rectangle;
@@ -47,8 +51,6 @@ int len = 30;
 
 byte dirP, dirT;
 
-String version = "版本 2.1.25";
-
 int i, j;
 
 PFont font;
@@ -81,9 +83,6 @@ void setup() {
   rect(640 + 3 * gap + strip + button + stick / 2 - handle / 2, 160 + gap + stick / 2 - handle / 2, handle, handle, edge);
   
   font = createFont("font", 12);
-  textFont(font);
-  fill(255);
-  text(version, 853 - 75, 480 - 9);
   
   pauseI(b0, bB0);
   captureI(b0, bB0);
