@@ -31,8 +31,8 @@ int sY = 160 + gap + stick / 2;
 int mX, mY;
 int kX, kY;
 
-int a1 = 28;//inf
-int a0 = 3;//
+int a1 = 28;
+int a0 = 3;
 
 color b0 = color(35);
 color bB0 = color(240);
@@ -40,20 +40,20 @@ color b1 = color(35);
 color bB1 = color(200);
 
 boolean move = true;
-boolean mp = false;//
-boolean mP = false;//
+boolean mp = false;
+boolean mP = false;
 
 int fileNum = 1;
 
-int rangeLow = 10;//inf
-int rangeHigh = 10;//
-int midx = 320;//
-int midy = 240;//
-int len = 30;//
+int rangeLow = 10;
+int rangeHigh = 10;
+int midx = 320;
+int midy = 240;
+int len = 30;
 
 byte dirP, dirT;
 
-int i, j;//
+int i, j;
 
 PFont font;
 
@@ -92,7 +92,7 @@ void setup() {
 
 void draw() {
   if (!mp) {
-    port.write(byte('!'));//
+    port.write(byte('!'));
   }
   
   if (video.available()) {
@@ -116,7 +116,7 @@ void draw() {
   
   image(src, 0, 0);
   
-  if (contours.size() > 0 && mp) {//
+  if (contours.size() > 0 && mp) {
     Contour biggestContour = contours.get(0);
     
     Rectangle r = biggestContour.getBoundingBox();
