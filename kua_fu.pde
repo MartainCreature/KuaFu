@@ -166,16 +166,16 @@ void draw() {
         strokeWeight(5); 
         stroke(240, 240, 240);
         if(dirP == byte('l') || dirP == byte('L')) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 - len, r.y + r.height/2);
+          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2 - len, r.y + r.height / 2);
         }
         else if(dirP == byte('r') || dirP == byte('R')) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 + len, r.y + r.height/2);
+          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2 + len, r.y + r.height / 2);
         }
         if(dirT == byte('u') || dirP == byte('U')) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 - len);
+          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2, r.y + r.height / 2 - len);
         }
         else if(dirT == byte('d') || dirP == byte('D')) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 + len);
+          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2, r.y + r.height / 2 + len);
         }
       }
     } 
@@ -185,7 +185,7 @@ void draw() {
   }
   
   if (mp) {
-    image(colorFilteredImage, src.width, 0, src.width/3, src.height/3);
+    image(colorFilteredImage, src.width, 0, src.width / 3, src.height / 3);
     
     noStroke();
     fill(36);
