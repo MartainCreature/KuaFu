@@ -2,7 +2,7 @@
 //
 //以颜色作为特征的物体追踪软件
 //范子睿著
-//版本：2.2.0
+//版本：2.2.1
 
 import gab.opencv.*;
 import processing.video.*;
