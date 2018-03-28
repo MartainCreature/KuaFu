@@ -20,6 +20,11 @@ ArrayList<Contour> contours;
 int hueL;
 int hueH;
 
+int rX;
+int rY;
+int rW;
+int rH;
+
 int lD = 30;
 
 int x0 = 640;
@@ -127,11 +132,27 @@ void draw() {
   image(src, 0, 0);
   
   if (contours.size() > 0 && selected) {
-    Contour biggestContour = contours.get(0);
+    Contour ctr = contours.get(0);
+    Rectangle r = ctr.getBoundingBox();;
+    boolean found = false;
+    for (int i = 0; i < contours.size(); i++) {
+      ctr = contours.get(i);
     
-    Rectangle r = biggestContour.getBoundingBox();
+      r = ctr.getBoundingBox();
+      
+      if ((r.x - (rX + rW)) * ((r.x + r.width) - rX) <= 0 && (r.y - (rY + rH)) * ((r.y + r.height) - rY) <= 0 && r.width > 20 && r.height > 20) {
+        found = true;
+        
+        rX = r.x;
+        rY = r.y;
+        rW = r.width;
+        rH = r.height;
+        
+        break;
+      }
+    }
     
-    if (r.width > 20 && r.height > 20) {
+    if (found) {
       noFill(); 
       strokeWeight(3); 
       stroke(light);
@@ -165,6 +186,11 @@ void draw() {
       }
     }
     else {
+      rX = 0;
+      rY = 0;
+      rW = src.width;
+      rH = src.height;
+      
       port.write(byte('!'));
     }
   }
@@ -263,6 +289,11 @@ void mousePressed() {
   
     hueL = hue - 5;
     hueH = hue + 5;
+    
+    rX = mouseX;
+    rY = mouseY;
+    rW = 0;
+    rH = 0;
   }
   
   if (Over() == 'j') {
