@@ -2,7 +2,7 @@
 //
 //以颜色作为特征的物体追踪软件
 //范子睿著
-//版本：2.2.3
+//版本：2.2.4
 
 import processing.video.*;
 import gab.opencv.*;
@@ -65,12 +65,13 @@ boolean pressingJ = false;
 
 String path = "视频/";
 String prefix = "KF";
+int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
 int count = 1;
 
 PFont font;
 
 void setup() {
-  println("KuaFu 2.2.3 by Fan Zirui");
+  println("KuaFu 2.2.4 by Fan Zirui");
   println();
   
   size(853, 480, P2D);
@@ -334,7 +335,7 @@ void mouseReleased() {
     recording = !recording;
     
     if (recording) {
-      videoExport.setMovieFileName(path + prefix + count + ".mp4");
+      videoExport.setMovieFileName(path + prefix + time + "_" + count + ".mp4");
       videoExport.startMovie();
       
       count++;
@@ -360,7 +361,7 @@ void keyTyped() {
     recording = !recording;
 
     if (recording) {
-      videoExport.setMovieFileName(path + prefix + count + ".mp4");
+      videoExport.setMovieFileName(path + prefix + time + "_" + count + ".mp4");
       videoExport.startMovie();
       
       count++;
