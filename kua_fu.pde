@@ -2,15 +2,17 @@
 //
 //以颜色作为特征的物体追踪软件
 //范子睿著
-//版本：2.2.1
+//版本：2.2.2
 
-import gab.opencv.*;
 import processing.video.*;
+import gab.opencv.*;
+import com.hamoid.*;
 import java.awt.Rectangle;
 import processing.serial.*; 
 
 Capture video;
 OpenCV opencv;
+VideoExport videoExport;
 Serial port;
 
 PImage src;
@@ -57,15 +59,18 @@ color light = color(240);
 color pressed = color(200);
 
 boolean moving = true;
+boolean recording = false;
 boolean selected = false;
 boolean pressingJ = false;
 
-int fileNum = 1;
+String path = "视频/";
+String prefix = "KF";
+int count = 1;
 
 PFont font;
 
 void setup() {
-  println("KuaFu 2.2.0 by Fan Zirui");
+  println("KuaFu 2.2.2 by Fan Zirui");
   println();
   
   size(853, 480, P2D);
@@ -77,6 +82,10 @@ void setup() {
   print("Using ");
   opencv = new OpenCV(this, video.width, video.height);
   contours = new ArrayList<Contour>();
+  println();
+  
+  videoExport = new VideoExport(this, "", video);
+  videoExport.setDebugging(false);
   
   port = new Serial(this,Serial.list()[2], 9600);
   
@@ -100,7 +109,7 @@ void setup() {
   
   pause(true, false);
   
-  capture(false);
+  record(false, false);
   
   joyStick();
 }
@@ -213,8 +222,13 @@ void draw() {
       }
     }
     
-    if (Over() == 'c') {
-      capture(true);
+    if (Over() == 'r') {
+      if (recording) {
+        record(true, true);
+      }
+      else {
+        record(false, true);
+      }
     }
   }
   else {
@@ -225,7 +239,12 @@ void draw() {
       pause(false, false);
     }
     
-    capture(false);
+    if (recording) {
+      record(true, false);
+    }
+    else {
+      record(false, false);
+    }
   }
   
   int r0 = 3;
@@ -275,6 +294,10 @@ void draw() {
     
     joyStick();
   }
+  
+  if (recording) {
+    videoExport.saveFrame();
+  }
 }
 
 void mousePressed() {
@@ -306,13 +329,18 @@ void mouseReleased() {
     moving = !moving;
   }
   
-  if (Over() == 'c') {
-    if (video.available()) {
-      video.read();
-    }
-    video.save("照片/" + fileNum + ".tif");
+  if (Over() == 'r') {
+    recording = !recording;
     
-    fileNum++;
+    if (recording) {
+      videoExport.setMovieFileName(path + prefix + count + ".mp4");
+      videoExport.startMovie();
+      
+      count++;
+    }
+    else {
+      videoExport.endMovie();
+    }
   }
   
   pressingJ = false;
@@ -327,13 +355,18 @@ void keyTyped() {
     moving = !moving;
   }
   
-  if (key == 'c') {
-    if (video.available()) {
-      video.read();
+  if (key == 'r') {
+    recording = !recording;
+
+    if (recording) {
+      videoExport.setMovieFileName(path + prefix + count + ".mp4");
+      videoExport.startMovie();
+      
+      count++;
     }
-    video.save("照片/" + fileNum + ".tif");
-    
-    fileNum++;
+    else {
+      videoExport.endMovie();
+    }
   }
 }
 
@@ -396,7 +429,7 @@ char Over() {
     return 'p';
   }
   else if (abs(mouseX - x1) <= w2 / 2 && abs(mouseY - y2) <= w2 / 2) {
-    return 'c';
+    return 'r';
   }
   else if (abs(mouseX - x2) <= w3 / 2 && abs(mouseY - y3) <= w3 / 2) {
     return 'j';
@@ -462,7 +495,7 @@ void pause(boolean s, boolean p) {
   }
 }
 
-void capture(boolean p) {
+void record(boolean s, boolean p) {
   color b;
   color f;
   if (!p) {
@@ -481,9 +514,16 @@ void capture(boolean p) {
   int x = x0 + gap + w1 + gap + w2 / 2;
   int y = y0 + gap + h1 + gap + w2 + gap + w2 / 2;
   
-  fill(f);
-  noStroke();
-  ellipse(x, y, 18, 18);
+  if (s) {
+    fill(f);
+    noStroke();
+    rect(x - 7, y - 7, 15, 15, 2);
+  }
+  else {
+    fill(f);
+    noStroke();
+    ellipse(x, y, 18, 18);
+  }
 }
 
 void joyStick() {
