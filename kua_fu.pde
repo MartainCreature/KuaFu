@@ -65,7 +65,7 @@ boolean pressingJ = false;
 
 String path = "视频/";
 String prefix = "KF";
-int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
+int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute() + second();
 int count = 1;
 
 PFont font;
