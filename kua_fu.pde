@@ -2,7 +2,7 @@
 //
 //以颜色作为特征的物体追踪软件
 //范子睿著
-//版本2.2.4
+//版本 3.0.0
 
 import processing.video.*;
 import gab.opencv.*;
@@ -45,11 +45,22 @@ int h2 = w3;
 
 int edge = 10;
 
-byte dirP;
-byte dirT;
+byte message;
+int dirP;
+int dirT;
+
+int L = 4;
+int l = 3;
+int r = 1;
+int R = 0;
+int U = 0;
+int u = 1;
+int d = 3;
+int D = 4;
 
 int pX = 0;
 int pY = 0;
+
 int jX = 0;
 int jY = 0;
 
@@ -71,7 +82,7 @@ int count = 1;
 PFont font;
 
 void setup() {
-  println("KuaFu 2.2.4 by Fan Zirui");
+  println("KuaFu 3.0.0 by Fan Zirui");
   println();
   
   size(853, 480, P2D);
@@ -178,21 +189,22 @@ void draw() {
         
         strokeWeight(5); 
         stroke(light);
-        if(dirP == byte('l') || dirP == byte('L')) {
+        if(dirP == l || dirP == L) {
           line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 - lD, r.y + r.height/2);
         }
-        else if(dirP == byte('r') || dirP == byte('R')) {
+        else if(dirP == r || dirP == R) {
           line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 + lD, r.y + r.height/2);
         }
-        if(dirT == byte('u') || dirP == byte('U')) {
+        if(dirT == u || dirP == U) {
           line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 - lD);
         }
-        else if(dirT == byte('d') || dirP == byte('D')) {
+        else if(dirT == d || dirP == D) {
           line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 + lD);
         }
         
-        port.write(dirP);
-        port.write(dirT);
+        message = dirP * 10 + dirT;
+        
+        port.write(message);
       }
     }
     else {
@@ -201,7 +213,7 @@ void draw() {
       rW = src.width;
       rH = src.height;
       
-      port.write(byte('!'));
+      port.write(byte(9));
     }
   }
   
@@ -260,8 +272,9 @@ void draw() {
     
     joyStick();
     
-    port.write(pan(jX, r0, r1));
-    port.write(tilt(jY, r0, r1));
+    message = pan(jX, r0, r1) * 10 + tilt(jY, r0, r1);
+    
+    port.write(message);
   }
   
   if (keyPressed) {
@@ -286,8 +299,9 @@ void draw() {
     
     joyStick();
     
-    port.write(pan(jX, r0, r1));
-    port.write(tilt(jY, r0, r1));
+    message = pan(jX, r0, r1) * 10 + tilt(jY, r0, r1);
+    
+    port.write(message);
   }
   else {
     jX = 0;
@@ -349,6 +363,7 @@ void mouseReleased() {
   
   jX = 0;
   jY = 0;
+  
   joyStick();
 }
 
@@ -372,23 +387,23 @@ void keyTyped() {
   }
 }
 
-byte pan(int x, int r0, int r1) {
-  byte p = 0;
+int pan(int x, int r0, int r1) {
+  int p = 2;
   
   if (x < -r1) {
-    p = 'L';
+    p = L;
     pX -= 2;
   }
   else if (x < -r0) {
-    p = 'l';
+    p = l;
     pX -= 1;
   }
   else if (x > r1) {
-    p = 'R';
+    p = R;
     pX += 2;
   }
   else if (x > r0) {
-    p = 'r';
+    p = r;
     pX += 1;
   }
   pX = constrain(pX, -90, 90);
@@ -396,23 +411,23 @@ byte pan(int x, int r0, int r1) {
   return p;
 }
 
-byte tilt(int y, int r0, int r1) {
-  byte t = 0;
+int tilt(int y, int r0, int r1) {
+  int t = 0;
   
   if (y < -r1) {
-    t = 'U';
+    t = U;
     pY -= 2;
   }
   else if (y < -r0) {
-    t = 'u';
+    t = u;
     pY -= 1;
   }
   else if (y > r1) {
-    t = 'D';
+    t = D;
     pY += 2;
   }
   else if (y > r0) {
-    t = 'd';
+    t = d;
     pY += 1;
   }
   pY = constrain(pY, -45, 45);
