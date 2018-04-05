@@ -2,7 +2,7 @@
 //
 //以颜色作为特征的物体追踪软件
 //范子睿著
-//版本 3.1.4
+//版本 3.1.5
 
 import processing.video.*;
 import gab.opencv.*;
@@ -82,7 +82,7 @@ int count = 1;
 PFont font;
 
 void setup() {
-  println("KuaFu 3.1.4 by Fan Zirui");
+  println("KuaFu 3.1.5 by Fan Zirui");
   println();
   
   size(853, 480, P2D);
@@ -124,6 +124,8 @@ void setup() {
   record(false, false);
   
   joyStick();
+  
+  port.write(byte(5));
 }
 
 void draw() {
