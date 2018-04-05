@@ -2,7 +2,7 @@
 //
 //以颜色作为特征的物体追踪软件
 //范子睿著
-//版本 3.1.2
+//版本 3.1.3
 
 import processing.video.*;
 import gab.opencv.*;
@@ -80,7 +80,7 @@ int count = 1;
 PFont font;
 
 void setup() {
-  println("KuaFu 3.1.2 by Fan Zirui");
+  println("KuaFu 3.1.3 by Fan Zirui");
   println();
   
   size(853, 480, P2D);
@@ -136,6 +136,8 @@ void draw() {
   opencv.useColor(); 
   src = opencv.getSnapshot();
   
+  opencv.blur(5); 
+  
   opencv.useColor(HSB);
   
   opencv.setGray(opencv.getH().clone());
@@ -180,8 +182,8 @@ void draw() {
       ellipse(r.x + r.width/2, r.y + r.height/2, 25, 25);
     
       if (moving && !pressingJ) {
-        dirP = pan((r.x + r.width / 2) - src.width / 2, 25, 50);
-        dirT = tilt((r.y + r.height / 2) - src.height / 2, 25, 50);
+        dirP = pan((r.x + r.width / 2) - src.width / 2, 20, 60);
+        dirT = tilt((r.y + r.height / 2) - src.height / 2, 20, 60);
         
         strokeWeight(5); 
         stroke(light);
@@ -308,7 +310,7 @@ void draw() {
     videoExport.saveFrame();
   }
   
-  delay(10);
+  delay(50);
 }
 
 void mousePressed() {
@@ -403,7 +405,7 @@ int pan(int x, int r0, int r1) {
 }
 
 int tilt(int y, int r0, int r1) {
-  int t = 0;
+  int t = 2;
   
   if (y < -r1) {
     t = uF;
