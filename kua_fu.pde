@@ -2,7 +2,7 @@
 //
 //以颜色作为特征的物体追踪软件
 //范子睿著
-//版本 3.0.0
+//版本 3.1.0
 
 import processing.video.*;
 import gab.opencv.*;
@@ -34,14 +34,12 @@ int y0 = 160;
 
 int gap = 10;
 
-int w0 = 853 - x0 - gap * 2;
 int w1 = 20;
 int w2 = 48;
 int w3 = 106;
 int lP = 26;
 int lJ = 26;
-int h1 = (w0 - lP) / 2 + lP;
-int h2 = w3;
+int h1 = w3;
 
 int edge = 10;
 
@@ -49,14 +47,14 @@ byte message;
 int dirP;
 int dirT;
 
-int L = 4;
-int l = 3;
-int r = 1;
-int R = 0;
-int U = 0;
-int u = 1;
-int d = 3;
-int D = 4;
+int lF = 4;
+int lS = 3;
+int rS = 1;
+int rF = 0;
+int uF = 4;
+int uS = 3;
+int dS = 1;
+int dF = 0;
 
 int pX = 0;
 int pY = 0;
@@ -82,7 +80,7 @@ int count = 1;
 PFont font;
 
 void setup() {
-  println("KuaFu 3.0.0 by Fan Zirui");
+  println("KuaFu 3.1.0 by Fan Zirui");
   println();
   
   size(853, 480, P2D);
@@ -105,18 +103,16 @@ void setup() {
     
   fill(background);
   noStroke();
-  rect(640, 160, 213, gap + h1 + gap + h2 + gap);
+  rect(640, 160, 213, gap + h1 + gap);
   fill(0);
   noStroke();
-  rect(640, 160 + gap + h1 + gap + h2 + gap, 213, 320 - gap - h1 - gap - h2 - gap);
+  rect(640, 160 + gap + h1 + gap, 213, 320 - gap - h1 - gap);
   
   fill(255);
   textFont(font);
   textAlign(RIGHT, BOTTOM);
   text("范子睿出品", width - 8, height - 8);
-  
-  platformPosition();
-  
+    
   selectedColor(light);
   
   pause(true, false);
@@ -128,7 +124,7 @@ void setup() {
 
 void draw() {
   if (!selected || !moving) {
-    port.write(byte('!'));
+    port.write(byte(9));
   }
   
   if (video.available()) {
@@ -184,25 +180,25 @@ void draw() {
       ellipse(r.x + r.width/2, r.y + r.height/2, 25, 25);
     
       if (moving && !pressingJ) {
-        dirP = pan((r.x + r.width / 2) - src.width / 2, 15, 50);
-        dirT = tilt((r.y + r.height / 2) - src.height / 2, 15, 50);
+        dirP = pan((r.x + r.width / 2) - src.width / 2, 25, 50);
+        dirT = tilt((r.y + r.height / 2) - src.height / 2, 25, 50);
         
         strokeWeight(5); 
         stroke(light);
-        if(dirP == l || dirP == L) {
+        if(dirP == lS || dirP == lF) {
           line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 - lD, r.y + r.height/2);
         }
-        else if(dirP == r || dirP == R) {
+        else if(dirP == rS || dirP == rF) {
           line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 + lD, r.y + r.height/2);
         }
-        if(dirT == u || dirP == U) {
+        if(dirT == uS || dirP == uF) {
           line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 - lD);
         }
-        else if(dirT == d || dirP == D) {
+        else if(dirT == dS || dirP == dF) {
           line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 + lD);
         }
         
-        message = dirP * 10 + dirT;
+        message = byte(dirP * 10 + dirT);
         
         port.write(message);
       }
@@ -222,9 +218,7 @@ void draw() {
   }
   
   strip();
-  
-  platformPosition();
-  
+    
   if (mousePressed) {
     if (Over() == 'p') {
       if (moving) {
@@ -265,14 +259,14 @@ void draw() {
   
   if (pressingJ) {
     int x = x0 + gap + w1 + gap + w2 + gap + w3 / 2;
-    int y = y0 + gap + h1 + gap + h2 / 2;
+    int y = y0 + gap + h1 / 2;
     
     jX = constrain(mouseX - x, -w3 / 2 + lJ / 2, w3 / 2 - lJ / 2);
-    jY = constrain(mouseY - y, -h2 / 2 + lJ / 2, h2 / 2 - lJ / 2);
+    jY = constrain(mouseY - y, -h1 / 2 + lJ / 2, h1 / 2 - lJ / 2);
     
     joyStick();
     
-    message = pan(jX, r0, r1) * 10 + tilt(jY, r0, r1);
+    message = byte(pan(jX, r0, r1) * 10 + tilt(jY, r0, r1));
     
     port.write(message);
   }
@@ -299,7 +293,7 @@ void draw() {
     
     joyStick();
     
-    message = pan(jX, r0, r1) * 10 + tilt(jY, r0, r1);
+    message = byte(pan(jX, r0, r1) * 10 + tilt(jY, r0, r1));
     
     port.write(message);
   }
@@ -313,6 +307,8 @@ void draw() {
   if (recording) {
     videoExport.saveFrame();
   }
+  
+  delay(10);
 }
 
 void mousePressed() {
@@ -391,22 +387,17 @@ int pan(int x, int r0, int r1) {
   int p = 2;
   
   if (x < -r1) {
-    p = L;
-    pX -= 2;
+    p = lF;
   }
   else if (x < -r0) {
-    p = l;
-    pX -= 1;
+    p = lS;
   }
   else if (x > r1) {
-    p = R;
-    pX += 2;
+    p = rF;
   }
   else if (x > r0) {
-    p = r;
-    pX += 1;
+    p = rS;
   }
-  pX = constrain(pX, -90, 90);
   
   return p;
 }
@@ -415,32 +406,27 @@ int tilt(int y, int r0, int r1) {
   int t = 0;
   
   if (y < -r1) {
-    t = U;
-    pY -= 2;
+    t = uF;
   }
   else if (y < -r0) {
-    t = u;
-    pY -= 1;
+    t = uS;
   }
   else if (y > r1) {
-    t = D;
-    pY += 2;
+    t = dF;
   }
   else if (y > r0) {
-    t = d;
-    pY += 1;
+    t = dS;
   }
-  pY = constrain(pY, -45, 45);
   
   return t;
 }
 
 char Over() {
   int x1 = x0 + gap + w1 + gap + w2 / 2;
-  int y1 = y0 + gap + h1 + gap + w2 / 2;
-  int y2 = y0 + gap + h1 + gap + w2 + gap + w2 / 2;
+  int y1 = y0 + gap + w2 / 2;
+  int y2 = y0 + gap + w2 + gap + w2 / 2;
   int x2 = x0 + gap + w1 + gap + w2 + gap + w3 / 2;
-  int y3 = y0 + gap + h1 + gap + w3 / 2;
+  int y3 = y0 + gap + w3 / 2;
   
   if (abs(mouseX - x1) <= w2 / 2 && abs(mouseY - y1) <= w2 / 2) {
     return 'p';
@@ -456,25 +442,11 @@ char Over() {
   }
 }
 
-void platformPosition() {
-  fill(dark);
-  noStroke();
-  rect(x0 + gap, y0 + gap, w0, h1, edge);
-  
-  int x = x0 + gap + w0 / 2;
-  int y = y0 + gap + h1 / 2;
-  
-  noFill();
-  strokeWeight(2);
-  stroke(light);
-  rect(x - lP / 2 + pX * 0.9, y - lP / 2 + pY * 0.85, lP, lP, edge);
-}
-
 void selectedColor(color c) {
   fill(c);
   strokeWeight(2);
   stroke(dark);
-  rect(x0 + gap, y0 + gap + h1 + gap, w1, h2, edge);
+  rect(x0 + gap, y0 + gap, w1, h1, edge);
 }
 
 void pause(boolean s, boolean p) {
@@ -491,10 +463,10 @@ void pause(boolean s, boolean p) {
   
   fill(b);
   noStroke();
-  rect(x0 + gap + w1 + gap, y0 + gap + h1 + gap, w2, w2, edge);
+  rect(x0 + gap + w1 + gap, y0 + gap, w2, w2, edge);
     
   int x = x0 + gap + w1 + gap + w2 / 2;
-  int y = y0 + gap + h1 + gap + w2 / 2;
+  int y = y0 + gap + w2 / 2;
   
   if (s) {
     fill(f);
@@ -526,10 +498,10 @@ void record(boolean s, boolean p) {
   
   fill(b);
   noStroke();
-  rect(x0 + gap + w1 + gap, y0 + gap + h1 + gap + w2 + gap, w2, w2, edge);
+  rect(x0 + gap + w1 + gap, y0 + gap + w2 + gap, w2, w2, edge);
   
   int x = x0 + gap + w1 + gap + w2 / 2;
-  int y = y0 + gap + h1 + gap + w2 + gap + w2 / 2;
+  int y = y0 + gap + w2 + gap + w2 / 2;
   
   if (s) {
     fill(f);
@@ -546,10 +518,10 @@ void record(boolean s, boolean p) {
 void joyStick() {
   fill(dark);
   noStroke();
-  rect(x0 + gap + w1 + gap + w2 + gap, y0 + gap + h1 + gap, w3, w3, edge);
+  rect(x0 + gap + w1 + gap + w2 + gap, y0 + gap, w3, w3, edge);
   
   int x = x0 + gap + w1 + gap + w2 + gap + w3 / 2;
-  int y = y0 + gap + h1 + gap + w3 / 2;
+  int y = y0 + gap + w3 / 2;
   
   fill(light);
   noStroke();
@@ -562,5 +534,5 @@ void strip() {
   rect(640, 160, 2, 320);
   fill(0);
   noStroke();
-  rect(640, 160 + gap + h1 + gap + h2 + gap, 2, 320 - gap - h1 - gap - h2 - gap);
+  rect(640, 160 + gap + h1 + gap, 2, 320 - gap - h1 - gap);
 }
