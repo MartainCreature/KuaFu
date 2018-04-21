@@ -2,7 +2,7 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿著
-//版本 3.1.9
+//版本 3.1.10
 
 import processing.video.*;
 import gab.opencv.*;
@@ -82,7 +82,7 @@ int count = 1;
 PFont font;
 
 void setup() {
-  println("KuaFu 3.1.9 by Fan Zirui");
+  println("KuaFu 3.1.10 by Fan Zirui");
   println();
   
   size(853, 480, P2D);
@@ -317,7 +317,10 @@ void draw() {
     videoExport.saveFrame();
   }
   
-  if (mouseX <= 640) {
+  if (pressingJ) {
+    cursor(MOVE);
+  }
+  else if (Over() == 'i') {
     cursor(CROSS);
   }
   else if (Over() != 'n') {
@@ -329,7 +332,7 @@ void draw() {
 }
 
 void mousePressed() {
-  if (mouseX <= 640) {
+  if (Over() == 'i') {
     selected = true;
   
     color c = get(mouseX, mouseY);
@@ -457,7 +460,10 @@ char Over() {
   int x2 = x0 + gap + w1 + gap + w2 + gap + w3 / 2;
   int y3 = y0 + gap + h1 + gap + w3 / 2;
   
-  if (abs(mouseX - x1) <= w2 / 2 && abs(mouseY - y1) <= w2 / 2) {
+  if (mouseX <= 640) {
+    return 'i';
+  }
+  else if (abs(mouseX - x1) <= w2 / 2 && abs(mouseY - y1) <= w2 / 2) {
     return 'p';
   }
   else if (abs(mouseX - x1) <= w2 / 2 && abs(mouseY - y2) <= w2 / 2) {
