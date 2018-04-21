@@ -2,7 +2,7 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿著
-//版本 3.1.8
+//版本 3.1.9
 
 import processing.video.*;
 import gab.opencv.*;
@@ -82,7 +82,7 @@ int count = 1;
 PFont font;
 
 void setup() {
-  println("KuaFu 3.1.8 by Fan Zirui");
+  println("KuaFu 3.1.9 by Fan Zirui");
   println();
   
   size(853, 480, P2D);
@@ -317,7 +317,15 @@ void draw() {
     videoExport.saveFrame();
   }
   
-  delay(50);
+  if (mouseX <= 640) {
+    cursor(CROSS);
+  }
+  else if (Over() != 'n') {
+    cursor(HAND);
+  }
+  else {
+    cursor(ARROW);
+  }
 }
 
 void mousePressed() {
