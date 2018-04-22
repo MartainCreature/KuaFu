@@ -2,7 +2,7 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿著
-//版本 3.2.1
+//版本 3.2.4
 
 import processing.video.*;
 import gab.opencv.*;
@@ -74,18 +74,21 @@ boolean recording = false;
 boolean selected = false;
 boolean pressingJ = false;
 
-String path = "视频/";
+String path = "视频";
 String prefix = "KF";
 int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
 int count = 1;
 
+String ver = "3.2.4";
+
 PFont font;
 
 void setup() {
-  println("KuaFu 3.2.1 by Fan Zirui");
+  println("KuaFu " + ver + " by Fan Zirui");
   println();
   
   size(853, 480, P2D);
+  surface.setTitle("夸父 " + ver);
   background(0);
   
   video = new Capture(this, 640, 480);
@@ -98,7 +101,8 @@ void setup() {
   
   videoExport = new VideoExport(this, "", video);
   videoExport.setDebugging(false);
-  
+  videoExport.setFfmpegPath(sketchPath() + "/ffmpeg");
+
   port = new Serial(this,Serial.list()[2], 9600);
   
   font = createFont("font", 12);
@@ -112,8 +116,8 @@ void setup() {
   
   fill(255);
   textFont(font);
-  textAlign(RIGHT, BOTTOM);
-  text("范子睿出品", width - 8, height - 8);
+  textAlign(LEFT, TOP);
+  text("保存路径 " + sketchPath() + "/" + path, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
   
   platformPosition();
     
@@ -365,7 +369,7 @@ void mouseReleased() {
     recording = !recording;
     
     if (recording) {
-      videoExport.setMovieFileName(path + prefix + time + "_" + count + ".mp4");
+      videoExport.setMovieFileName(path + "/" + prefix + time + "_" + count + ".mp4");
       videoExport.startMovie();
       
       count++;
@@ -392,7 +396,7 @@ void keyTyped() {
     recording = !recording;
 
     if (recording) {
-      videoExport.setMovieFileName(path + prefix + time + "_" + count + ".mp4");
+      videoExport.setMovieFileName(path + "/" + prefix + time + "_" + count + ".mp4");
       videoExport.startMovie();
       
       count++;
