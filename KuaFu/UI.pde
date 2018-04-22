@@ -106,7 +106,9 @@ void strip() {
   rect(640, 160, 30, 320);
   fill(0);
   noStroke();
-  rect(640, 160 + gap + h1 + gap + h2 + gap, 30, 320 - gap - h1 - gap - h2 - gap);
+  rect(640, 160 + gap + h1 + gap + h2 + gap, 213, 320 - gap - h1 - gap - h2 - gap);
 
   selectedColor(c);
+  
+  text("保存路径 " + sketchPath() + "/" + path, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
 }
