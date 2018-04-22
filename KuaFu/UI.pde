@@ -110,5 +110,6 @@ void strip() {
 
   selectedColor(c);
   
+  fill(255);
   text("保存路径 " + sketchPath() + "/" + path, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
 }
