@@ -2,7 +2,7 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿著
-//版本 3.2.6
+//版本 3.3.0
 
 import processing.video.*;
 import gab.opencv.*;
@@ -19,6 +19,7 @@ PImage src;
 PImage colorFilteredImage;
 ArrayList<Contour> contours;
 
+color sC;
 int hueL;
 int hueH;
 
@@ -79,7 +80,7 @@ String prefix = "KF";
 int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
 int count = 1;
 
-String ver = "3.2.6";
+String ver = "3.3.0";
 
 PFont font;
 
@@ -88,6 +89,7 @@ void setup() {
   println();
   
   size(853, 480, P2D);
+  pixelDensity(displayDensity());
   surface.setTitle("夸父 " + ver);
   background(0);
   
@@ -339,11 +341,11 @@ void mousePressed() {
   if (Over() == 'i') {
     selected = true;
   
-    color c = get(mouseX, mouseY);
+    sC = get(mouseX * displayDensity(), mouseY * displayDensity());
   
-    selectedColor(c);
+    selectedColor(sC);
   
-    int hue = int(map(hue(c), 0, 255, 0, 180));
+    int hue = int(map(hue(sC), 0, 255, 0, 180));
     println("Hue(" + hue + ") selected.");
   
     hueL = hue - 5;
