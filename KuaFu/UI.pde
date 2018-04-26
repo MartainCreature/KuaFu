@@ -99,8 +99,6 @@ void joyStick() {
 }
 
 void strip() {
-  color c = get(x0 + gap + w1 / 2, y0 + gap + h1 + gap + h2 / 2);
-  
   fill(background);
   noStroke();
   rect(640, 160, 30, 320);
@@ -108,7 +106,7 @@ void strip() {
   noStroke();
   rect(640, 160 + gap + h1 + gap + h2 + gap, 213, 320 - gap - h1 - gap - h2 - gap);
 
-  selectedColor(c);
+  selectedColor(sC);
   
   fill(255);
   text("保存路径 " + sketchPath() + "/" + path, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
