@@ -2,7 +2,7 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿著
-//版本 3.3.0
+//版本 3.4.0
 
 import processing.video.*;
 import gab.opencv.*;
@@ -80,7 +80,7 @@ String prefix = "KF";
 int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
 int count = 1;
 
-String ver = "3.3.0";
+String ver = "3.4.0";
 
 PFont font;
 
@@ -92,6 +92,8 @@ void setup() {
   pixelDensity(displayDensity());
   surface.setTitle("夸父 " + ver);
   background(0);
+  
+  path = System.getProperty("user.home") + "/Documents/夸父/" + path;
   
   video = new Capture(this, 640, 480);
   video.start(); 
@@ -119,7 +121,7 @@ void setup() {
   fill(255);
   textFont(font);
   textAlign(LEFT, TOP);
-  text("保存路径 " + sketchPath() + "/" + path, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
+  text("保存路径 " + path, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
   
   platformPosition();
     
