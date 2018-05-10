@@ -2,7 +2,7 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿著
-//版本 3.4.1
+//版本 3.4.2
 
 import processing.video.*;
 import gab.opencv.*;
@@ -75,12 +75,13 @@ boolean recording = false;
 boolean selected = false;
 boolean pressingJ = false;
 
-String path = "/Documents/夸父/视频";
+String folderPath = "/Documents/夸父";
+String videoPath;
 String prefix = "KF";
 int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
 int count = 1;
 
-String ver = "3.4.1";
+String ver = "3.4.2";
 
 PFont font;
 
@@ -93,7 +94,8 @@ void setup() {
   surface.setTitle("夸父 " + ver);
   background(0);
   
-  path = System.getProperty("user.home") + path;
+  folderPath = System.getProperty("user.home") + folderPath;
+  videoPath = folderPath + "/视频";
   
   video = new Capture(this, 640, 480);
   video.start(); 
@@ -121,7 +123,7 @@ void setup() {
   fill(255);
   textFont(font);
   textAlign(LEFT, TOP);
-  text("保存路径 " + path, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
+  text("保存路径 " + videoPath, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
   
   platformPosition();
     
@@ -373,7 +375,7 @@ void mouseReleased() {
     recording = !recording;
     
     if (recording) {
-      videoExport.setMovieFileName(path + "/" + prefix + time + "_" + count + ".mp4");
+      videoExport.setMovieFileName(videoPath + "/" + prefix + time + "_" + count + ".mp4");
       videoExport.startMovie();
       
       count++;
@@ -400,7 +402,7 @@ void keyTyped() {
     recording = !recording;
 
     if (recording) {
-      videoExport.setMovieFileName(path + "/" + prefix + time + "_" + count + ".mp4");
+      videoExport.setMovieFileName(videoPath + "/" + prefix + time + "_" + count + ".mp4");
       videoExport.startMovie();
       
       count++;
