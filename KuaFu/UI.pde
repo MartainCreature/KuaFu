@@ -76,7 +76,7 @@ void record(boolean s, boolean p) {
   if (s) {
     fill(f);
     noStroke();
-    rect(x - 7, y - 7, 15, 15, 2);
+    rect(x - 7.5, y - 7.5, 15, 15, 2);
   }
   else {
     fill(f);
