@@ -2,11 +2,11 @@ void mousePressed() {
   if (mouseX <= 640) {
     selected = true;
   
-    selectedC = get(mouseX * displayDensity(), mouseY * displayDensity());
+    palette.clr = get(mouseX * displayDensity(), mouseY * displayDensity());
   
     palette.display();
   
-    int hue = int(map(hue(selectedC), 0, 255, 0, 180));
+    int hue = int(map(hue(palette.clr), 0, 255, 0, 180));
     println("Hue(" + hue + ") selected.");
   
     hueL = hue - 5;
@@ -20,6 +20,10 @@ void mousePressed() {
   
   if (joyStick.over()) {
     joyStick.state = true;
+  }
+  
+  if (changePath.over()) {
+    selectFolder("", "folderSelected");
   }
 }
 
@@ -65,6 +69,10 @@ void keyTyped() {
       videoExport.endMovie();
     }
   }
+  
+  if (key == 'c') {
+    selectFolder("", "folderSelected");
+  }
 }
 
 void manualEvent() {
@@ -91,5 +99,11 @@ void manualEvent() {
     else {
       joyStick.sY = joyStick.yM;
     }
+  }
+}
+
+void folderSelected(File selection) {
+  if (selection != null) {
+    videoPath = selection.getAbsolutePath();
   }
 }
