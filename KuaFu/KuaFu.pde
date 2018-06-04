@@ -123,6 +123,7 @@ void setup() {
   pause.x1A += 1;
   pause.y1A += 1;
   pause.x2A += 2;
+  pause.y2A -= 1;
   record.x1A -= 1;
   record.y1A -= 1;
   record.x2A += 2;
