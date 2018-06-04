@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 3.5.1
+//版本 3.5.2
 
-String ver = "3.5.1";
+String ver = "3.5.2";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -44,7 +44,6 @@ String prefix = "KF";
 int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
 int count = 1;
 
-color selectedC;
 int gap = 10;
 color background = color(36);
 color dark = color(60);
@@ -106,10 +105,10 @@ void setup() {
                       48,
                       48,
                       true, "record");
-  changePath = new Button(video.width + int(video.width / 3) - gap - 16,
-                          int(video.height / 3) + gap + cameraAngle.height + gap + palette.height + gap + gap,
-                          16,
-                          10,
+  changePath = new Button(video.width + int(video.width / 3) - gap - 20,
+                          int(video.height / 3) + gap + cameraAngle.height + gap + palette.height + gap + gap + 1,
+                          20,
+                          14,
                           false, "change");
   joyStick = new JoyStick(video.width + gap + palette.width + gap + pause.width + gap,
                           int(video.height / 3) + gap + cameraAngle.height + gap,
@@ -167,6 +166,7 @@ void draw() {
   
   pause.display(mousePressed && !joyStick.state && pause.over());
   record.display(mousePressed && !joyStick.state && record.over());
+  changePath.display(mousePressed && !joyStick.state && changePath.over());
   
   manualEvent();
   
