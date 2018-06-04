@@ -2,7 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 3.4.2
+//版本 3.5.1
+
+String ver = "3.5.1";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -15,41 +17,16 @@ OpenCV opencv;
 VideoExport videoExport;
 Serial port;
 
+int hueL, hueH;
 PImage src;
 PImage colorFilteredImage;
+
 ArrayList<Contour> contours;
-
-color sC;
-int hueL;
-int hueH;
-
-int rX;
-int rY;
-int rW;
-int rH;
-
-int lD = 30;
-
-int x0 = 640;
-int y0 = 160;
-
-int gap = 10;
-
-int w0 = 853 - x0 - gap * 2;
-int w1 = 20;
-int w2 = 48;
-int w3 = 106;
-int lP = 26;
-int lJ = 26;
-int h1 = (w0 - lP) / 2 + lP;
-int h2 = w3;
-
-int edge = 10;
+int rX, rY;
+int rW, rH;
 
 byte message;
-int dirP;
-int dirT;
-
+int dirP, dirT;
 int lF = 4;
 int lS = 3;
 int rS = 1;
@@ -59,21 +36,7 @@ int uS = 3;
 int dS = 1;
 int dF = 0;
 
-int pX = 0;
-int pY = 0;
-
-int jX = 0;
-int jY = 0;
-
-color background = color(36);
-color dark = color(60);
-color light = color(240);
-color pressed = color(200);
-
-boolean moving = true;
-boolean recording = false;
 boolean selected = false;
-boolean pressingJ = false;
 
 String folderPath = "/Documents/夸父";
 String videoPath;
@@ -81,9 +44,21 @@ String prefix = "KF";
 int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
 int count = 1;
 
-String ver = "3.4.2";
-
+color selectedC;
+int gap = 10;
+color background = color(36);
+color dark = color(60);
+color light = color(240);
+color pressed = color(200);
 PFont font;
+
+Position cameraAngle;
+Palette palette;
+Button pause;
+Button record;
+Button changePath;
+JoyStick joyStick;
+Text absolutePath;
 
 void setup() {
   println("KuaFu " + ver + " by Fan Zirui");
@@ -111,378 +86,101 @@ void setup() {
 
   port = new Serial(this,Serial.list()[2], 9600);
   
-  font = createFont("font", 12);
-    
-  fill(background);
-  noStroke();
-  rect(640, 160, 213, gap + h1 + gap + h2 + gap);
-  fill(0);
-  noStroke();
-  rect(640, 160 + gap + h1 + gap + h2 + gap, 213, 320 - gap - h1 - gap - h2 - gap);
+  font = createFont("", 12);
   
-  fill(255);
-  textFont(font);
-  textAlign(LEFT, TOP);
-  text("保存路径 " + videoPath, 640 + 10, 160 + gap + h1 + gap + h2 + gap + 10, 213 - 20, 480);
+  cameraAngle = new Position(video.width + gap,
+                             int(video.height / 3) + gap,
+                             int(video.width / 3) - gap * 2,
+                             (int(video.width / 3) - gap * 2 - 10) / 2 + 10);
+  palette = new Palette(video.width + gap,
+                        int(video.height / 3) + gap + cameraAngle.height + gap,
+                        20,
+                        106);
+  pause = new Button(video.width + gap + palette.width + gap,
+                     int(video.height / 3) + gap + cameraAngle.height + gap,
+                     48,
+                     48,
+                     true, "pause");
+  record = new Button(video.width + gap + palette.width + gap,
+                      int(video.height / 3) + gap + cameraAngle.height + gap + pause.height + gap,
+                      48,
+                      48,
+                      true, "record");
+  changePath = new Button(video.width + int(video.width / 3) - gap - 16,
+                          int(video.height / 3) + gap + cameraAngle.height + gap + palette.height + gap + gap,
+                          16,
+                          10,
+                          false, "change");
+  joyStick = new JoyStick(video.width + gap + palette.width + gap + pause.width + gap,
+                          int(video.height / 3) + gap + cameraAngle.height + gap,
+                          palette.height,
+                          palette.height);
+  absolutePath = new Text(video.width + gap,
+                          int(video.height / 3) + gap + cameraAngle.height + gap + palette.height + gap + gap,
+                          int(video.width / 3) - gap * 2,
+                          480);
+                          
+  pause.x1A += 1;
+  pause.y1A += 1;
+  pause.x2A += 2;
+  record.x1A -= 1;
+  record.y1A -= 1;
+  record.x2A += 2;
+  record.y2A += 2;
   
-  platformPosition();
-    
-  selectedColor(light);
-  
-  pause(true, false);
-  
-  record(false, false);
-  
-  joyStick();
+  canvas();
+  cameraAngle.display();
+  palette.display();
+  pause.display(false);
+  record.display(false);
+  changePath.display(false);
+  joyStick.display();
+  absolutePath.display("保存路径\n" + videoPath);
   
   port.write(byte(5));
 }
 
 void draw() {
-  if (!selected || !moving) {
+  if (!selected || pause.state) {
     port.write(byte(9));
   }
   
   if (video.available()) {
     video.read();
   }
+  
+  processImage();
 
-  opencv.loadImage(video);
-
-  opencv.useColor(); 
-  src = opencv.getSnapshot();
-  
-  opencv.blur(5); 
-  
-  opencv.useColor(HSB);
-  
-  opencv.setGray(opencv.getH().clone());
-  
-  opencv.inRange(hueL, hueH);
-  
-  colorFilteredImage = opencv.getSnapshot();
-  
-  contours = opencv.findContours(true, true);
-  
   image(src, 0, 0);
-  
-  if (contours.size() > 0 && selected) {
-    Contour ctr = contours.get(0);
-    Rectangle r = ctr.getBoundingBox();;
-    boolean found = false;
-    for (int i = 0; i < contours.size(); i++) {
-      ctr = contours.get(i);
-    
-      r = ctr.getBoundingBox();
-      
-      if ((r.x - (rX + rW)) * ((r.x + r.width) - rX) <= 0 && (r.y - (rY + rH)) * ((r.y + r.height) - rY) <= 0 && r.width > 20 && r.height > 20) {
-        found = true;
-        
-        rX = r.x;
-        rY = r.y;
-        rW = r.width;
-        rH = r.height;
-        
-        break;
-      }
-    }
-    
-    if (found) {
-      noFill(); 
-      strokeWeight(3); 
-      stroke(light);
-      rect(r.x, r.y, r.width, r.height);
-    
-      noStroke(); 
-      fill(light);
-      ellipse(r.x + r.width/2, r.y + r.height/2, 25, 25);
-    
-      if (moving && !pressingJ) {
-        dirP = pan((r.x + r.width / 2) - src.width / 2, 20, 60);
-        dirT = tilt((r.y + r.height / 2) - src.height / 2, 20, 60);
-        
-        strokeWeight(5); 
-        stroke(light);
-        if(dirP == lS || dirP == lF) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 - lD, r.y + r.height/2);
-        }
-        else if(dirP == rS || dirP == rF) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 + lD, r.y + r.height/2);
-        }
-        if(dirT == uS || dirP == uF) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 - lD);
-        }
-        else if(dirT == dS || dirP == dF) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 + lD);
-        }
-        
-        message = byte(dirP * 10 + dirT);
-        
-        port.write(message);
-      }
-    }
-    else {
-      rX = 0;
-      rY = 0;
-      rW = src.width;
-      rH = src.height;
-      
-      port.write(byte(9));
-    }
-  }
   
   if (selected) {
     image(colorFilteredImage, src.width, 0, src.width/3, src.height/3);
   }
   
-  strip();
+  track();
   
-  platformPosition();
-    
-  if (mousePressed && !pressingJ) {
-    if (Over() == 'p') {
-      if (moving) {
-        pause(true, true);
-      }
-      else {
-        pause(false, true);
-      }
-    }
-    
-    if (Over() == 'r') {
-      if (recording) {
-        record(true, true);
-      }
-      else {
-        record(false, true);
-      }
-    }
-  }
-  else {
-    if (moving) {
-      pause(true, false);
-    }
-    else {
-      pause(false, false);
-    }
-    
-    if (recording) {
-      record(true, false);
-    }
-    else {
-      record(false, false);
-    }
-  }
+  canvas();
+  cameraAngle.display();
+  palette.display();
+  absolutePath.display("保存路径\n" + videoPath);
   
-  int r0 = 3;
-  int r1 = 28;
+  pause.display(mousePressed && !joyStick.state && pause.over());
+  record.display(mousePressed && !joyStick.state && record.over());
   
-  if (pressingJ) {
-    int x = x0 + gap + w1 + gap + w2 + gap + w3 / 2;
-    int y = y0 + gap + h1 + gap + h2 / 2;
-    
-    jX = constrain(mouseX - x, -w3 / 2 + lJ / 2, w3 / 2 - lJ / 2);
-    jY = constrain(mouseY - y, -h2 / 2 + lJ / 2, h2 / 2 - lJ / 2);
-    
-    joyStick();
-    
-    message = byte(pan(jX, r0, r1) * 10 + tilt(jY, r0, r1));
-    
-    port.write(message);
-  }
-  else if (keyPressed) {
-    if (keyCode == 37) {
-      jX = -(r0 + r1) / 2;
-    }
-    else if (keyCode == 39) {
-      jX = (r0 + r1) / 2;
-    }
-    else {
-      jX = 0;
-    }
-    if (keyCode == 38) {
-      jY = -(r0 + r1) / 2;
-    }
-    else if (keyCode == 40) {
-      jY = (r0 + r1) / 2;
-    }
-    else {
-      jY = 0;
-    }
-    
-    joyStick();
-    
-    message = byte(pan(jX, r0, r1) * 10 + tilt(jY, r0, r1));
-    
-    port.write(message);
-  }
-  else {
-    jX = 0;
-    jY = 0;
-    
-    joyStick();
-  }
+  manualEvent();
   
-  if (recording) {
+  joyStick.display();
+  
+  setCursor();
+  
+  if (record.state) {
     videoExport.saveFrame();
   }
   
-  if (pressingJ) {
-    cursor(MOVE);
-  }
-  else if (Over() == 'i') {
-    cursor(CROSS);
-  }
-  else if (Over() != 'n') {
-    cursor(HAND);
-  }
-  else {
-    cursor(ARROW);
-  }
-}
-
-void mousePressed() {
-  if (Over() == 'i') {
-    selected = true;
-  
-    sC = get(mouseX * displayDensity(), mouseY * displayDensity());
-  
-    selectedColor(sC);
-  
-    int hue = int(map(hue(sC), 0, 255, 0, 180));
-    println("Hue(" + hue + ") selected.");
-  
-    hueL = hue - 5;
-    hueH = hue + 5;
+  if (joyStick.state) {
+    message = byte(pan(joyStick.sX - joyStick.xM, joyStick.r0, joyStick.r1) * 10
+                   + tilt(joyStick.sY - joyStick.yM, joyStick.r0, joyStick.r1));
     
-    rX = mouseX;
-    rY = mouseY;
-    rW = 0;
-    rH = 0;
-  }
-  
-  if (Over() == 'j') {
-    pressingJ = true;
-  }
-}
-
-void mouseReleased() {
-  if (Over() == 'p') {
-    moving = !moving;
-  }
-  
-  if (Over() == 'r') {
-    recording = !recording;
-    
-    if (recording) {
-      videoExport.setMovieFileName(videoPath + "/" + prefix + time + "_" + count + ".mp4");
-      videoExport.startMovie();
-      
-      count++;
-    }
-    else {
-      videoExport.endMovie();
-    }
-  }
-  
-  pressingJ = false;
-  
-  jX = 0;
-  jY = 0;
-  
-  joyStick();
-}
-
-void keyTyped() {
-  if (key == 'p') {
-    moving = !moving;
-  }
-  
-  if (key == 'r') {
-    recording = !recording;
-
-    if (recording) {
-      videoExport.setMovieFileName(videoPath + "/" + prefix + time + "_" + count + ".mp4");
-      videoExport.startMovie();
-      
-      count++;
-    }
-    else {
-      videoExport.endMovie();
-    }
-  }
-}
-
-int pan(int x, int r0, int r1) {
-  int p = 2;
-  
-  if (x < -r1) {
-    p = lF;
-    pX -= 2;
-  }
-  else if (x < -r0) {
-    p = lS;
-    pX -= 1;
-  }
-  else if (x > r1) {
-    p = rF;
-    pX += 2;
-  }
-  else if (x > r0) {
-    p = rS;
-    pX += 1;
-  }
-  
-  pX = constrain(pX, -90, 90);
-  
-  return p;
-}
-
-int tilt(int y, int r0, int r1) {
-  int t = 2;
-  
-  if (y < -r1) {
-    t = uF;
-    pY -= 2;
-  }
-  else if (y < -r0) {
-    t = uS;
-    pY -= 1;
-  }
-  else if (y > r1) {
-    t = dF;
-    pY += 2;
-  }
-  else if (y > r0) {
-    t = dS;
-    pY += 1;
-  }
-  
-  pY = constrain(pY, -45, 45);
-  
-  return t;
-}
-
-char Over() {
-  int x1 = x0 + gap + w1 + gap + w2 / 2;
-  int y1 = y0 + gap + h1 + gap + w2 / 2;
-  int y2 = y0 + gap + h1 + gap + w2 + gap + w2 / 2;
-  int x2 = x0 + gap + w1 + gap + w2 + gap + w3 / 2;
-  int y3 = y0 + gap + h1 + gap + w3 / 2;
-  
-  if (mouseX <= 640) {
-    return 'i';
-  }
-  else if (abs(mouseX - x1) <= w2 / 2 && abs(mouseY - y1) <= w2 / 2) {
-    return 'p';
-  }
-  else if (abs(mouseX - x1) <= w2 / 2 && abs(mouseY - y2) <= w2 / 2) {
-    return 'r';
-  }
-  else if (abs(mouseX - x2) <= w3 / 2 && abs(mouseY - y3) <= w3 / 2) {
-    return 'j';
-  }
-  else {
-    return 'n';
+    port.write(message);
   }
 }
