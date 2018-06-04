@@ -34,6 +34,7 @@ class Palette {
   int x0, y0;
   int width, height;
   int edge;
+  color clr;
   
   Palette(int x, int y, int w, int h) {
     x0 = x;
@@ -41,12 +42,13 @@ class Palette {
     width = w;
     height = h;
     edge = 10;
+    clr = color(0);
   }
   
   void display() {
     strokeWeight(2);
     stroke(dark);
-    fill(selectedC);
+    fill(clr);
     rect(x0, y0, width, height, edge);
   }
 }
@@ -89,7 +91,7 @@ class Button {
       edge = 5;
       f = light;
       b0 = color(0);
-      b1 = background;
+      b1 = color(50);
     }
     
     if (n.equals("pause")) {
