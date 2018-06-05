@@ -2,15 +2,15 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 3.5.2
+//版本 3.5.3
 
-String ver = "3.5.2";
+String ver = "3.5.3";
 
 import processing.video.*;
 import gab.opencv.*;
 import com.hamoid.*;
 import java.awt.Rectangle;
-import processing.serial.*; 
+import processing.serial.*;
 
 Capture video;
 OpenCV opencv;
@@ -38,10 +38,8 @@ int dF = 0;
 
 boolean selected = false;
 
-String folderPath = "/Documents/夸父";
-String videoPath;
-String prefix = "KF";
-int time = month() * 1000000 + day() * 10000 + hour() * 100 + minute();
+String path = "/Documents/夸父";
+String prefix = "K ";
 int count = 1;
 
 int gap = 10;
@@ -68,8 +66,7 @@ void setup() {
   surface.setTitle("夸父 " + ver);
   background(0);
   
-  folderPath = System.getProperty("user.home") + folderPath;
-  videoPath = folderPath + "/视频";
+  path = System.getProperty("user.home") + path + "/视频";
   
   video = new Capture(this, 640, 480);
   video.start(); 
@@ -135,7 +132,9 @@ void setup() {
   record.display(false);
   changePath.display(false);
   joyStick.display();
-  absolutePath.display("保存路径\n" + videoPath);
+  absolutePath.display("保存路径\n" + path);
+  
+  count = getLastCount() + 1;
   
   port.write(byte(5));
 }
@@ -162,7 +161,7 @@ void draw() {
   canvas();
   cameraAngle.display();
   palette.display();
-  absolutePath.display("保存路径\n" + videoPath);
+  absolutePath.display("保存路径\n" + path);
   
   pause.display(mousePressed && !joyStick.state && pause.over());
   record.display(mousePressed && !joyStick.state && record.over());
