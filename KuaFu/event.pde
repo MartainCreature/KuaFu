@@ -36,7 +36,7 @@ void mouseReleased() {
     record.state = !record.state;
     
     if (record.state) {
-      videoExport.setMovieFileName(videoPath + "/" + prefix + time + "_" + count + ".mp4");
+      videoExport.setMovieFileName(path + "/" + prefix + count + ".mp4");
       videoExport.startMovie();
       
       count++;
@@ -60,7 +60,7 @@ void keyTyped() {
     record.state = !record.state;
 
     if (record.state) {
-      videoExport.setMovieFileName(videoPath + "/" + prefix + time + "_" + count + ".mp4");
+      videoExport.setMovieFileName(path + "/" + prefix + count + ".mp4");
       videoExport.startMovie();
       
       count++;
@@ -104,6 +104,6 @@ void manualEvent() {
 
 void folderSelected(File selection) {
   if (selection != null) {
-    videoPath = selection.getAbsolutePath();
+    path = selection.getAbsolutePath();
   }
 }
