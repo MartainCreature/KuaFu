@@ -1,3 +1,37 @@
+int getLastCount() {
+  File file = new File(path);
+  String names[] = file.list();
+  
+  int max = 1;
+  for (int i = names.length - 1; i >= 0; i --) {
+    int num = 0;
+    
+    int len = names[i].length();
+    if (names[i].charAt(0) == 'K'
+        && names[i].charAt(1) == ' '
+        && names[i].charAt(len - 4) == '.'
+        && names[i].charAt(len - 3) == 'm'
+        && names[i].charAt(len - 2) == 'p'
+        && names[i].charAt(len - 1) == '4') {
+      
+      for (int j = 2; j <= len - 5; j ++) {
+        if (names[i].charAt(j) >= '0' || names[i].charAt(j) <= '9') {
+          num = num * 10 + names[i].charAt(j) - '0';
+        }
+        else {
+          break;
+        }
+        
+        if (j == len - 5 && num > max) {
+          max = num;
+        }
+      }
+    }
+  }
+  
+  return max;
+}
+
 void processImage() {
   opencv.loadImage(video);
 
@@ -22,7 +56,7 @@ void track() {
     Contour ctr = contours.get(0);
     Rectangle r = ctr.getBoundingBox();;
     boolean found = false;
-    for (int i = 0; i < contours.size(); i++) {
+    for (int i = 0; i < contours.size(); i ++) {
       ctr = contours.get(i);
     
       r = ctr.getBoundingBox();
