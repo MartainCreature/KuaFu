@@ -115,7 +115,7 @@ void setup() {
                           int(video.height / 3) + gap + cameraAngle.height + gap + palette.height + gap + gap,
                           int(video.width / 3) - gap * 2,
                           480);
-                          
+  
   pause.x1A += 1;
   pause.y1A += 1;
   pause.x2A += 2;
@@ -149,7 +149,7 @@ void draw() {
   }
   
   processImage();
-
+  
   image(src, 0, 0);
   
   if (selected) {
