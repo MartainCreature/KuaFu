@@ -34,7 +34,7 @@ int getLastCount() {
 
 void processImage() {
   opencv.loadImage(video);
-
+  
   opencv.useColor(); 
   src = opencv.getSnapshot();
   
@@ -58,7 +58,7 @@ void track() {
     boolean found = false;
     for (int i = 0; i < contours.size(); i ++) {
       ctr = contours.get(i);
-    
+      
       r = ctr.getBoundingBox();
       
       if ((r.x - (rX + rW)) * ((r.x + r.width) - rX) <= 0 && (r.y - (rY + rH)) * ((r.y + r.height) - rY) <= 0 && r.width > 20 && r.height > 20) {
@@ -78,11 +78,11 @@ void track() {
       strokeWeight(3); 
       stroke(light);
       rect(r.x, r.y, r.width, r.height);
-    
+      
       noStroke(); 
       fill(light);
       ellipse(r.x + r.width/2, r.y + r.height/2, 25, 25);
-    
+      
       if (!pause.state && !joyStick.state) {
         dirP = pan((r.x + r.width / 2) - src.width / 2, 20, 60);
         dirT = tilt((r.y + r.height / 2) - src.height / 2, 20, 60);
@@ -161,6 +161,6 @@ int tilt(int y, int r0, int r1) {
     t = dS;
     cameraAngle.pY += 1;
   }
-    
+  
   return t;
 }
