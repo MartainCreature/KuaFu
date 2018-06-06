@@ -1,14 +1,14 @@
 void mousePressed() {
   if (mouseX <= 640) {
     selected = true;
-  
+    
     palette.clr = get(mouseX * displayDensity(), mouseY * displayDensity());
-  
+    
     palette.display();
-  
+    
     int hue = int(map(hue(palette.clr), 0, 255, 0, 180));
     println("Hue(" + hue + ") selected.");
-  
+    
     hueL = hue - 5;
     hueH = hue + 5;
     
@@ -58,7 +58,7 @@ void keyTyped() {
   
   if (key == 'r') {
     record.state = !record.state;
-
+    
     if (record.state) {
       videoExport.setMovieFileName(path + "/" + prefix + count + ".mp4");
       videoExport.startMovie();
