@@ -153,7 +153,7 @@ void draw() {
   image(src, 0, 0);
   
   if (selected) {
-    image(colorFilteredImage, src.width, 0, src.width/3, src.height/3);
+    image(colorFilteredImage, src.width, 0, src.width / 3, src.height / 3);
   }
   
   track();
