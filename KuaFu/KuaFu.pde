@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 3.5.3
+//版本 3.5.4
 
-String ver = "3.5.3";
+String ver = "3.5.4";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -17,7 +17,7 @@ OpenCV opencv;
 VideoExport videoExport;
 Serial port;
 
-int hueL, hueH;
+int hue;
 PImage src;
 PImage colorFilteredImage;
 
