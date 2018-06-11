@@ -6,11 +6,8 @@ void mousePressed() {
     
     palette.display();
     
-    int hue = int(map(hue(palette.clr), 0, 255, 0, 180));
+    hue = int(map(hue(palette.clr), 0, 255, 0, 180));
     println("Hue(" + hue + ") selected.");
-    
-    hueL = hue - 5;
-    hueH = hue + 5;
     
     rX = mouseX;
     rY = mouseY;
