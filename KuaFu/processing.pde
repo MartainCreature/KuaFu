@@ -44,7 +44,7 @@ void processImage() {
   
   opencv.setGray(opencv.getH().clone());
   
-  opencv.inRange(hueL, hueH);
+  opencv.inRange(hue - 5, hue + 5);
   
   colorFilteredImage = opencv.getSnapshot();
   
@@ -81,7 +81,7 @@ void track() {
       
       noStroke(); 
       fill(light);
-      ellipse(r.x + r.width/2, r.y + r.height/2, 25, 25);
+      ellipse(r.x + r.width / 2, r.y + r.height / 2, 25, 25);
       
       if (!pause.state && !joyStick.state) {
         dirP = pan((r.x + r.width / 2) - src.width / 2, 20, 60);
@@ -91,16 +91,16 @@ void track() {
         stroke(light);
         int lD = 30;
         if(dirP == lS || dirP == lF) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 - lD, r.y + r.height/2);
+          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2 - lD, r.y + r.height / 2);
         }
         else if(dirP == rS || dirP == rF) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2 + lD, r.y + r.height/2);
+          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2 + lD, r.y + r.height / 2);
         }
         if(dirT == uS || dirP == uF) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 - lD);
+          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2, r.y + r.height / 2 - lD);
         }
         else if(dirT == dS || dirP == dF) {
-          line(r.x + r.width/2, r.y + r.height/2, r.x + r.width/2, r.y + r.height/2 + lD);
+          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2, r.y + r.height / 2 + lD);
         }
         
         message = byte(dirP * 10 + dirT);
