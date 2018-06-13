@@ -182,5 +182,5 @@ void draw() {
                    + tilt(joyStick.sY - joyStick.yM, joyStick.r0, joyStick.r1));
     
     port.write(message);
-  
+  }
 }
