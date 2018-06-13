@@ -80,7 +80,7 @@ void setup() {
   videoExport.setDebugging(false);
   videoExport.setFfmpegPath(sketchPath() + "/ffmpeg");
 
-  port = new Serial(this,Serial.list()[2], 9600);
+  port = new Serial(this, Serial.list()[2], 9600);
   
   font = createFont("", 12);
   
@@ -182,5 +182,5 @@ void draw() {
                    + tilt(joyStick.sY - joyStick.yM, joyStick.r0, joyStick.r1));
     
     port.write(message);
-  }
+  
 }
