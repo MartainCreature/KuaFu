@@ -4,7 +4,7 @@
 //范子睿
 //版本 3.5.5
 
-String ver = "3.5.4";
+String ver = "3.5.5";
 
 import processing.video.*;
 import gab.opencv.*;
