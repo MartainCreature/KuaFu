@@ -2,7 +2,7 @@ int getLastCount() {
   File file = new File(path);
   String names[] = file.list();
   
-  int max = 1;
+  int max = 0;
   for (int i = names.length - 1; i >= 0; i --) {
     int num = 0;
     
