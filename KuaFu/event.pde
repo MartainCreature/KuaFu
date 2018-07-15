@@ -77,6 +77,9 @@ void keyTyped() {
   
   if (key == 'z') {
     port.write(byte(5));
+    
+    cameraAngle.pX = cameraAngle.pX0;
+    cameraAngle.pY = cameraAngle.pY0;
   }
 }
 
