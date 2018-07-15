@@ -21,6 +21,8 @@ void mousePressed() {
   
   if (changePath.over()) {
     selectFolder("", "folderSelected");
+    
+    count = getLastCount() + 1;
   }
 }
 
@@ -69,6 +71,8 @@ void keyTyped() {
   
   if (key == 'f') {
     selectFolder("", "folderSelected");
+    
+    count = getLastCount() + 1;
   }
   
   if (key == 'z') {
