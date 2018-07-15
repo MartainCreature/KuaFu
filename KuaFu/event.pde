@@ -67,8 +67,12 @@ void keyTyped() {
     }
   }
   
-  if (key == 'c') {
+  if (key == 'f') {
     selectFolder("", "folderSelected");
+  }
+  
+  if (key == 'z') {
+    port.write(byte(5));
   }
 }
 
