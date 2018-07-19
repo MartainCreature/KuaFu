@@ -124,19 +124,15 @@ int pan(int x, int r0, int r1) {
   
   if (x < -r1) {
     p = lF;
-    cameraAngle.pX -= 2;
   }
   else if (x < -r0) {
     p = lS;
-    cameraAngle.pX -= 1;
   }
   else if (x > r1) {
     p = rF;
-    cameraAngle.pX += 2;
   }
   else if (x > r0) {
     p = rS;
-    cameraAngle.pX += 1;
   }
   
   return p;
@@ -147,19 +143,15 @@ int tilt(int y, int r0, int r1) {
   
   if (y < -r1) {
     t = uF;
-    cameraAngle.pY -= 2;
   }
   else if (y < -r0) {
     t = uS;
-    cameraAngle.pY -= 1;
   }
   else if (y > r1) {
     t = dF;
-    cameraAngle.pY += 2;
   }
   else if (y > r0) {
     t = dS;
-    cameraAngle.pY += 1;
   }
   
   return t;
