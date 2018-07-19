@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 3.5.7
+//版本 3.6.2
 
-String ver = "3.5.7";
+String ver = "3.6.2";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -26,6 +26,7 @@ int rX, rY;
 int rW, rH;
 
 byte message;
+int lMessage;
 int dirP, dirT;
 int lF = 4;
 int lS = 3;
@@ -49,7 +50,7 @@ color light = color(240);
 color pressed = color(200);
 PFont font;
 
-Position cameraAngle;
+PointMap camera;
 Palette palette;
 Button pause;
 Button record;
@@ -84,35 +85,37 @@ void setup() {
   
   font = createFont("", 12);
   
-  cameraAngle = new Position(video.width + gap,
-                             int(video.height / 3) + gap,
-                             int(video.width / 3) - gap * 2,
-                             (int(video.width / 3) - gap * 2 - 10) / 2 + 10);
+  camera = new PointMap(video.width + gap,
+                        int(video.height / 3) + gap,
+                        int(video.width / 3) - gap * 2,
+                        (int(video.width / 3) - gap * 2 - 10) / 2 + 10,
+                        0.5,
+                        0.9);
   palette = new Palette(video.width + gap,
-                        int(video.height / 3) + gap + cameraAngle.height + gap,
+                        int(video.height / 3) + gap + camera.height + gap,
                         20,
                         106);
   pause = new Button(video.width + gap + palette.width + gap,
-                     int(video.height / 3) + gap + cameraAngle.height + gap,
+                     int(video.height / 3) + gap + camera.height + gap,
                      48,
                      48,
                      true, "pause");
   record = new Button(video.width + gap + palette.width + gap,
-                      int(video.height / 3) + gap + cameraAngle.height + gap + pause.height + gap,
+                      int(video.height / 3) + gap + camera.height + gap + pause.height + gap,
                       48,
                       48,
                       true, "record");
   changePath = new Button(video.width + int(video.width / 3) - gap - 20,
-                          int(video.height / 3) + gap + cameraAngle.height + gap + palette.height + gap + gap + 1,
+                          int(video.height / 3) + gap + camera.height + gap + palette.height + gap + gap + 1,
                           20,
                           14,
                           false, "change");
   joyStick = new JoyStick(video.width + gap + palette.width + gap + pause.width + gap,
-                          int(video.height / 3) + gap + cameraAngle.height + gap,
+                          int(video.height / 3) + gap + camera.height + gap,
                           palette.height,
                           palette.height);
   absolutePath = new Text(video.width + gap,
-                          int(video.height / 3) + gap + cameraAngle.height + gap + palette.height + gap + gap,
+                          int(video.height / 3) + gap + camera.height + gap + palette.height + gap + gap,
                           int(video.width / 3) - gap * 2,
                           480);
   
@@ -126,7 +129,11 @@ void setup() {
   record.y2A += 2;
   
   canvas();
-  cameraAngle.display();
+  
+  noStroke();
+  fill(dark);
+  rect(camera.x0, camera.y0, camera.width, camera.height, camera.edge);
+  
   palette.display();
   pause.display(false);
   record.display(false);
@@ -159,7 +166,31 @@ void draw() {
   track();
   
   canvas();
-  cameraAngle.display();
+  
+  if (mousePressed && camera.over()) {
+    camera.display(1);
+    
+    float pP = 1 - (constrain(mouseX - camera.x0, camera.pL / 2, camera.width - camera.pL / 2) - camera.pL / 2) * 1.0 / (camera.width - camera.pL);
+    float pT = 1 - (constrain(mouseY - camera.y0, camera.pL / 2, camera.height - camera.pL / 2) - camera.pL / 2) * 1.0 / (camera.height - camera.pL);
+    if (pP >= 1) {
+      pP -= 0.01;
+    }
+    if (pT >= 1) {
+      pT -= 0.01;
+    }
+      
+    lMessage = 100 + int(pP * 10) * 10 + int(pT * 10);
+    
+    port.write(lMessage);
+  }
+  else {
+    camera.display(0);
+  }
+  camera.opa -= 64;
+  if (camera.opa < 0) {
+    camera.opa = 0;
+  }
+  
   palette.display();
   absolutePath.display("保存路径\n" + path);
   
