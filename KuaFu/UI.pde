@@ -1,32 +1,55 @@
-class Position {
+class PointMap {
   int x0, y0;
   int width, height;
-  int pX, pY;
+  int xM, yM;
+  int pX0, pY0;
+  int pX1, pY1;
   int pL;
   int edge;
+  int opa = 0;
   
-  Position(int x, int y, int w, int h) {
+  PointMap(int x, int y, int w, int h, float pX, float pY) {
     x0 = x;
     y0 = y;
     width = w;
     height = h;
-    pX = x0 + width / 2;
-    pY = y0 + height / 2;
+    xM = x0 + w / 2;
+    yM = y0 + h / 2;
     pL = 26;
+    pX0 = x0 + pL / 2 + int((w - pL) * pX);
+    pY0 = y0 + pL / 2 + int((h - pL) * pY);
     edge = 10;
   }
   
-  void display() {
-    pX = constrain(pX, x0 + pL / 2, x0 + width - pL / 2);
-    pY = constrain(pY, y0 + pL / 2, y0 + height - pL / 2);
+  boolean over() {
+    if (abs(mouseX - xM) <= width / 2 && abs(mouseY - yM) <= height / 2) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
+  void display(int p) {
+    if (p == 1) {
+      pX1 = constrain(mouseX, x0 + pL / 2, x0 + width - pL / 2);
+      pY1 = constrain(mouseY, y0 + pL / 2, y0 + height - pL / 2);
+      
+      opa = 255;
+    }
+    else if (p == 2) {
+      pX1 = pX0;
+      pY1 = pY0;
+      
+      opa = 255;
+    }
     
     noStroke();
     fill(dark);
     rect(x0, y0, width, height, edge);
-    strokeWeight(2);
-    stroke(light);
+    stroke(light, opa);
     noFill();
-    rect(pX - pL / 2, pY - pL / 2, pL, pL, edge);
+    rect(pX1 - pL / 2, pY1 - pL / 2, pL, pL, edge);
   }
 }
 
@@ -217,16 +240,16 @@ void canvas() {
   noStroke();
   fill(0);
   rect(video.width,
-       video.height / 3 + gap + cameraAngle.height + gap + palette.height + gap,
+       video.height / 3 + gap + camera.height + gap + palette.height + gap,
        video.width / 3,
-       video.height * 2 / 3 - gap - cameraAngle.height - gap - palette.height - gap);
+       video.height * 2 / 3 - gap - camera.height - gap - palette.height - gap);
   
   noStroke();
   fill(background);
   rect(video.width,
        video.height / 3,
        video.width / 3,
-       gap + cameraAngle.height + gap + palette.height + gap);
+       gap + camera.height + gap + palette.height + gap);
 }
 
 void setCursor() {
@@ -236,7 +259,7 @@ void setCursor() {
   else if (mouseX <= 640) {
     cursor(CROSS);
   }
-  else if (pause.over() || record.over() || changePath.over() || joyStick.over()) {
+  else if (camera.over() || pause.over() || record.over() || changePath.over() || joyStick.over()) {
     cursor(HAND);
   }
   else {
