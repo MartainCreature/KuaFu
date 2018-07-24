@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 3.6.2
+//版本 3.7.0
 
-String ver = "3.6.2";
+String ver = "3.7.0";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -216,4 +216,9 @@ void draw() {
   }
   
   delay(50);
+}
+
+void exit() {
+  port.write(byte(5));
+  super.exit();
 }
