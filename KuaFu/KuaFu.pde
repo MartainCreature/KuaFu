@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 3.7.0
+//版本 4.0.2
 
-String ver = "3.7.0";
+String ver = "4.0.2";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -25,17 +25,9 @@ ArrayList<Contour> contours;
 int rX, rY;
 int rW, rH;
 
+int dly;
+
 byte message;
-int lMessage;
-int dirP, dirT;
-int lF = 4;
-int lS = 3;
-int rS = 1;
-int rF = 0;
-int uF = 4;
-int uS = 3;
-int dS = 1;
-int dF = 0;
 
 boolean selected = false;
 
@@ -179,9 +171,9 @@ void draw() {
       pT -= 0.01;
     }
       
-    lMessage = 100 + int(pP * 10) * 10 + int(pT * 10);
+    message = byte((pP * 10) * 10 + (pT * 10));
     
-    port.write(lMessage);
+    port.write(message);
   }
   else {
     camera.display(0);
@@ -209,16 +201,16 @@ void draw() {
   }
   
   if (joyStick.state) {
-    message = byte(pan(joyStick.sX - joyStick.xM, joyStick.r0, joyStick.r1) * 10
-                   + tilt(joyStick.sY - joyStick.yM, joyStick.r0, joyStick.r1));
+    message = msg(joyStick.sX - joyStick.xM, joyStick.sY - joyStick.yM, joyStick.width / 2, joyStick.height / 2);
     
     port.write(message);
   }
   
-  delay(50);
+  delay(dly);
 }
 
 void exit() {
   port.write(byte(5));
+  
   super.exit();
 }
