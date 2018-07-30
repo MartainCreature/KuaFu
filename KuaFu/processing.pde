@@ -84,26 +84,22 @@ void track() {
       ellipse(r.x + r.width / 2, r.y + r.height / 2, 25, 25);
       
       if (!pause.state && !joyStick.state) {
-        dirP = pan((r.x + r.width / 2) - src.width / 2, 20, 60);
-        dirT = tilt((r.y + r.height / 2) - src.height / 2, 20, 60);
+        int dX = (r.x + r.width / 2) - src.width / 2;
+        int dY = (r.y + r.height / 2) - src.height / 2;
+        
+        float scale = 0.5;
+        
+        int xL = int(dX * scale);
+        int yL = int(dY * scale);
         
         strokeWeight(5); 
         stroke(light);
-        int lD = 30;
-        if(dirP == lS || dirP == lF) {
-          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2 - lD, r.y + r.height / 2);
-        }
-        else if(dirP == rS || dirP == rF) {
-          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2 + lD, r.y + r.height / 2);
-        }
-        if(dirT == uS || dirP == uF) {
-          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2, r.y + r.height / 2 - lD);
-        }
-        else if(dirT == dS || dirP == dF) {
-          line(r.x + r.width / 2, r.y + r.height / 2, r.x + r.width / 2, r.y + r.height / 2 + lD);
-        }
+        line(r.x + r.width / 2, r.y + r.height / 2, 
+             constrain(r.x + r.width / 2 + xL, 0, src.width), r.y + r.height / 2);
+        line(r.x + r.width / 2, r.y + r.height / 2, 
+             r.x + r.width / 2, r.y + r.height / 2 + yL);
         
-        message = byte(dirP * 10 + dirT);
+        message = msg(dX, dY, src.width / 2, src.height / 2);
         
         port.write(message);
       }
@@ -119,40 +115,40 @@ void track() {
   }
 }
 
-int pan(int x, int r0, int r1) {
-  int p = 2;
+byte msg(int x, int y, int xN, int yN) {
+  int neg = 2;
+  int zer = 1;
+  int pos = 0;
+   
+  int pan = 1;
+  int tilt = 2;
   
-  if (x < -r1) {
-    p = lF;
+  int a, m, n, v;
+  
+  if (abs(x) > abs(y)) {
+    a = pan;
+    m = x;
+    n = xN;
   }
-  else if (x < -r0) {
-    p = lS;
-  }
-  else if (x > r1) {
-    p = rF;
-  }
-  else if (x > r0) {
-    p = rS;
+  else {
+    a = tilt;
+    m = y;
+    n = yN;
   }
   
-  return p;
-}
+  if (abs(m) < 10) {
+    v = zer;
+  }
+  else if (m < 0) {
+    v = neg;
+  }
+  else {
+    v = pos;
+  }
+  
+  message = byte(a * 10 + v + 100);
+  
+  dly = -m * 30 / n + 30;
 
-int tilt(int y, int r0, int r1) {
-  int t = 2;
-  
-  if (y < -r1) {
-    t = uF;
-  }
-  else if (y < -r0) {
-    t = uS;
-  }
-  else if (y > r1) {
-    t = dF;
-  }
-  else if (y > r0) {
-    t = dS;
-  }
-  
-  return t;
+  return message;
 }
