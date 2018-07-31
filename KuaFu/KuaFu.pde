@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 4.0.3
+//版本 4.0.4
 
-String ver = "4.0.3";
+String ver = "4.0.4";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -32,7 +32,7 @@ byte message;
 boolean selected = false;
 
 String path = "/Documents/夸父";
-String prefix = "K ";
+String prefix = "追踪 ";
 int count;
 
 int gap = 10;
