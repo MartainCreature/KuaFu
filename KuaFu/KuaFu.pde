@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 4.0.2
+//版本 4.0.3
 
-String ver = "4.0.2";
+String ver = "4.0.3";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -33,7 +33,7 @@ boolean selected = false;
 
 String path = "/Documents/夸父";
 String prefix = "K ";
-int count = 1;
+int count;
 
 int gap = 10;
 color background = color(36);
@@ -159,29 +159,9 @@ void draw() {
   
   canvas();
   
-  if (mousePressed && camera.over()) {
-    camera.display(1);
-    
-    float pP = 1 - (constrain(mouseX - camera.x0, camera.pL / 2, camera.width - camera.pL / 2) - camera.pL / 2) * 1.0 / (camera.width - camera.pL);
-    float pT = 1 - (constrain(mouseY - camera.y0, camera.pL / 2, camera.height - camera.pL / 2) - camera.pL / 2) * 1.0 / (camera.height - camera.pL);
-    if (pP >= 1) {
-      pP -= 0.01;
-    }
-    if (pT >= 1) {
-      pT -= 0.01;
-    }
-      
-    message = byte((pP * 10) * 10 + (pT * 10));
-    
-    port.write(message);
-  }
-  else {
-    camera.display(0);
-  }
+  camera.display(0);
   camera.opa -= 64;
-  if (camera.opa < 0) {
-    camera.opa = 0;
-  }
+  camera.opa = constrain(camera.opa, 0, 255);
   
   palette.display();
   absolutePath.display("保存路径\n" + path);
