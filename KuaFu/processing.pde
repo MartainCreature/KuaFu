@@ -7,8 +7,9 @@ int getLastCount() {
     int num = 0;
     
     int len = names[i].length();
-    if (names[i].charAt(0) == 'K'
-        && names[i].charAt(1) == ' '
+    if (names[i].charAt(0) == '追'
+        && names[i].charAt(1) == '踪'
+        && names[i].charAt(2) == ' '
         && names[i].charAt(len - 4) == '.'
         && names[i].charAt(len - 3) == 'm'
         && names[i].charAt(len - 2) == 'p'
