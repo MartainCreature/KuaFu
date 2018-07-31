@@ -15,6 +15,23 @@ void mousePressed() {
     rH = 0;
   }
   
+  if (camera.over()) {
+    camera.display(1);
+    
+    float pP = 1 - (constrain(mouseX - camera.x0, camera.pL / 2, camera.width - camera.pL / 2) - camera.pL / 2) * 1.0 / (camera.width - camera.pL);
+    float pT = 1 - (constrain(mouseY - camera.y0, camera.pL / 2, camera.height - camera.pL / 2) - camera.pL / 2) * 1.0 / (camera.height - camera.pL);
+    if (pP >= 1) {
+      pP -= 0.01;
+    }
+    if (pT >= 1) {
+      pT -= 0.01;
+    }
+      
+    message = byte((pP * 10) * 10 + (pT * 10));
+    
+    port.write(message);
+  }
+  
   if (joyStick.over()) {
     joyStick.state = true;
   }
