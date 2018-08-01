@@ -27,8 +27,8 @@ void mousePressed() {
       pT -= 0.01;
     }
       
-    message = byte((pP * 10) * 10 + (pT * 10));
-    
+    message = byte(byte(pP * 10) * 10 + byte(pT * 10));
+
     port.write(message);
   }
   
