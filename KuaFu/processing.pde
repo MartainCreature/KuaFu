@@ -137,7 +137,7 @@ byte msg(int x, int y, int xN, int yN) {
     n = yN;
   }
   
-  if (abs(m) < 10) {
+  if (abs(m) < 20) {
     v = zer;
   }
   else if (m < 0) {
@@ -149,7 +149,7 @@ byte msg(int x, int y, int xN, int yN) {
   
   message = byte(a * 10 + v + 100);
   
-  dly = -m * 30 / n + 30;
+  dly = constrain(abs(m) * -70 / n + 50, 5, 50);
 
   return message;
 }
