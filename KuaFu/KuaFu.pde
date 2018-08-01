@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 4.0.5
+//版本 4.0.6
 
-String ver = "4.0.5";
+String ver = "4.0.6";
 
 import processing.video.*;
 import gab.opencv.*;
