@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 4.0.6
+//版本 4.0.7
 
-String ver = "4.0.6";
+String ver = "4.0.7";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -170,7 +170,7 @@ void draw() {
   record.display(mousePressed && !joyStick.state && record.over());
   changePath.display(mousePressed && !joyStick.state && changePath.over());
   
-  manualEvent();
+  joyStickEvent();
   
   joyStick.display();
   
