@@ -99,7 +99,7 @@ void keyTyped() {
   }
 }
 
-void manualEvent() {
+void joyStickEvent() {
   if (joyStick.state) {
     joyStick.sX = mouseX;
     joyStick.sY = mouseY;
