@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 4.0.7
+//版本 4.0.8
 
-String ver = "4.0.7";
+String ver = "4.0.8";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -51,7 +51,18 @@ JoyStick joyStick;
 Text absolutePath;
 
 void setup() {
+  println("@@^   ./@@`  =@@      =@@        ,@@`        @@@@@@@@@  @@^      @@^\n"
+        + "@@^ ./@@`    =@@      =@@       .@@@@.       @@^        @@^      @@^\n"
+        + "@@|/@@`      =@@      =@@      .@@^=@@.      @@^        @@^      @@^\n"
+        + "@@@@`        =@@      =@@      @@/  |@|.     @@@@@@@@|  @@^      @@^\n"
+        + "@@@@|        =@@      =@@    ./@@]]]]@@|     @@/[[[[[[  @@^      @@^\n"
+        + "@@^|@@]      =@@      =@@    /@@@@@@@@@@|    @@^        @@^      @@^\n"
+        + "@@^ .|@@`    =@@.     =@|   =@@       .@@^   @@^        |@|     .@@^\n"
+        + "@@^   .|@@`   |@@|]]]@@@   =@@.        ,@@^  @@^        *@@@]]]/@@^\n"
+        + "[[`     ,[[`   .[|@@@[.   .[[.          ,[[. [[`          *[|@@/[");
+  println();
   println("KuaFu " + ver + " by Fan Zirui");
+  println();
   println();
   
   size(853, 480, P2D);
@@ -64,7 +75,6 @@ void setup() {
   video = new Capture(this, 640, 480);
   video.start(); 
   
-  print("Using ");
   opencv = new OpenCV(this, video.width, video.height);
   contours = new ArrayList<Contour>();
   println();
@@ -134,6 +144,9 @@ void setup() {
   absolutePath.display("保存路径\n" + path);
   
   count = getLastCount() + 1;
+  
+  println();
+  println();
   
   port.write(byte(5));
 }
