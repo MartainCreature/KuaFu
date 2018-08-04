@@ -256,10 +256,10 @@ void setCursor() {
   if (joyStick.state) {
     cursor(MOVE);
   }
-  else if (mouseX <= 640) {
+  else if (mouseX <= 640 || camera.over()) {
     cursor(CROSS);
   }
-  else if (camera.over() || pause.over() || record.over() || changePath.over() || joyStick.over()) {
+  else if (pause.over() || record.over() || changePath.over() || joyStick.over()) {
     cursor(HAND);
   }
   else {
