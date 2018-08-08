@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 4.0.9
+//版本 4.0.10
 
-String ver = "4.0.9";
+String ver = "4.0.10";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -173,8 +173,6 @@ void draw() {
   canvas();
   
   camera.display(0);
-  camera.opa -= 64;
-  camera.opa = constrain(camera.opa, 0, 255);
   
   palette.display();
   absolutePath.display("保存路径\n" + path);
