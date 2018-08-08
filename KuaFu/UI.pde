@@ -43,10 +43,16 @@ class PointMap {
       
       opa = 255;
     }
+    else {
+      opa -= 64;
+    }
     
     noStroke();
     fill(dark);
     rect(x0, y0, width, height, edge);
+    
+    opa = constrain(opa, 0, 255);
+    
     stroke(light, opa);
     noFill();
     rect(pX1 - pL / 2, pY1 - pL / 2, pL, pL, edge);
