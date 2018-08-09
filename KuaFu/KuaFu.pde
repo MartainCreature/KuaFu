@@ -2,9 +2,9 @@
 //
 //采用颜色特征的物体实时跟踪软件
 //范子睿
-//版本 4.0.10
+//版本 4.1.0
 
-String ver = "4.0.10";
+String ver = "4.1.0";
 
 import processing.video.*;
 import gab.opencv.*;
@@ -101,17 +101,23 @@ void setup() {
                      int(video.height / 3) + gap + camera.height + gap,
                      48,
                      48,
-                     true, "pause");
+                     10,
+                     true,
+                     "pause", "resume");
   record = new Button(video.width + gap + palette.width + gap,
                       int(video.height / 3) + gap + camera.height + gap + pause.height + gap,
                       48,
                       48,
-                      true, "record");
+                      10,
+                      true,
+                      "record", "stop");
   changePath = new Button(video.width + int(video.width / 3) - gap - 20,
                           int(video.height / 3) + gap + camera.height + gap + palette.height + gap + gap + 1,
                           20,
                           14,
-                          false, "change");
+                          5,
+                          false,
+                          "change");
   joyStick = new JoyStick(video.width + gap + palette.width + gap + pause.width + gap,
                           int(video.height / 3) + gap + camera.height + gap,
                           palette.height,
