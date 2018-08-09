@@ -95,7 +95,7 @@ class Button {
   PShape i1, i2;
   boolean state;
   
-  Button(int x, int y, int w, int h, boolean t, String n) {
+  Button(int x, int y, int w, int h, int e, boolean t, String n) {
     x0 = x;
     y0 = y;
     width = w;
@@ -103,38 +103,60 @@ class Button {
     xM = x0 + w / 2;
     yM = y0 + h / 2;
     type = t;
-    name = n;
     state = false;
     x1A = 0;
     y1A = 0;
     x2A = 0;
     y2A = 0;
+    edge = e;
     
     if (type) {
-      edge = 10;
       f = background;
       b0 = light;
       b1 = pressed;
     }
     else {
-      edge = 5;
       f = light;
       b0 = color(0);
       b1 = color(50);
     }
     
-    if (n.equals("pause")) {
-      i1 = loadShape(sketchPath() + "/图标/pauseI.svg");
-      i2 = loadShape(sketchPath() + "/图标/resumeI.svg");
+    i1 = loadShape(sketchPath() + "/图标/" + n + ".svg");
+    i2 = loadShape(sketchPath() + "/图标/" + n + ".svg");
+    
+    i1.setFill(f);
+    i2.setFill(f);
+  }
+  
+  Button(int x, int y, int w, int h, int e, boolean t, String n1, String n2) {
+    x0 = x;
+    y0 = y;
+    width = w;
+    height = h;
+    xM = x0 + w / 2;
+    yM = y0 + h / 2;
+    type = t;
+    state = false;
+    x1A = 0;
+    y1A = 0;
+    x2A = 0;
+    y2A = 0;
+    edge = e;
+    
+    if (type) {
+      f = background;
+      b0 = light;
+      b1 = pressed;
     }
-    else if (n.equals("record")) {
-      i1 = loadShape(sketchPath() + "/图标/recordI.svg");
-      i2 = loadShape(sketchPath() + "/图标/stopI.svg");
+    else {
+      f = light;
+      b0 = color(0);
+      b1 = color(50);
     }
-    else if (n.equals("change")) {
-      i1 = loadShape(sketchPath() + "/图标/changeI.svg");
-      i2 = loadShape(sketchPath() + "/图标/changeI.svg");
-    }
+    
+    i1 = loadShape(sketchPath() + "/图标/" + n1 + ".svg");
+    i2 = loadShape(sketchPath() + "/图标/" + n2 + ".svg");
+    
     i1.setFill(f);
     i2.setFill(f);
   }
